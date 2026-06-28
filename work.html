@@ -92,16 +92,8 @@
       <div class="grain-overlay"></div>
     </div>
 
-    <!-- ── PLATFORM FLOOR ── -->
-    <div class="platform-floor" aria-hidden="true">
-      <div class="platform-edge"></div>
-      <div class="platform-surface">
-        <div class="safety-line"></div>
-        <div class="puddle puddle--1"></div>
-        <div class="puddle puddle--2"></div>
-        <div class="puddle puddle--3"></div>
-      </div>
-    </div>
+    <!-- NOTE: .platform-floor removed entirely.
+         The ground is provided by the background image assets only. -->
 
     <!-- ── HUD OVERLAY ── -->
     <div class="hud" aria-label="Station HUD">
@@ -141,117 +133,114 @@
 
     <!-- ══════════════════════════════════════════════════════
          TRAIN CONTAINER — Milestone 2
-         The entire train lives here, assembled from SVG/PNG layers.
-         Starts off-screen left; JS slides it into center.
     ══════════════════════════════════════════════════════ -->
     <div class="train-container" id="train-container" aria-label="Arriving train">
-
       <div class="train" id="train" role="region" aria-label="Subway train">
 
-        <!-- ── LAYER 01: Train base body ── -->
+        <!-- LAYER 01: Train base body -->
         <div class="train-layer train-layer--base" id="tl-base">
           <img src="./img/assets/train/train-rebase.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 02: Wheel bogies ── -->
+        <!-- LAYER 02: Wheel bogies -->
         <div class="train-layer train-layer--bogies" id="tl-bogies">
           <img src="./img/assets/train/wheel-bogies.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 03: Access panels (x2) ── -->
-        <div class="train-layer train-layer--access-1" id="tl-access-1">
+        <!-- LAYER 03: Access panels — hidden (too noisy) -->
+        <div class="train-layer train-layer--access-1" id="tl-access-1" aria-hidden="true">
           <img src="./img/assets/train/access-panels1.png" alt="" draggable="false" />
         </div>
-        <div class="train-layer train-layer--access-2" id="tl-access-2">
+        <div class="train-layer train-layer--access-2" id="tl-access-2" aria-hidden="true">
           <img src="./img/assets/train/access-panels2.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 04: Door track ── -->
-        <div class="train-layer train-layer--door-track" id="tl-door-track">
+        <!-- LAYER 04: Door track — hidden -->
+        <div class="train-layer train-layer--door-track" id="tl-door-track" aria-hidden="true">
           <img src="./img/assets/train/door-track.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 05: Interior ── -->
+        <!-- LAYER 05: Interior -->
         <div class="train-layer train-layer--interior" id="tl-interior">
           <img src="./img/assets/train/interior.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 06: Interior light (off until stopped) ── -->
+        <!-- LAYER 06: Interior light -->
         <div class="train-layer train-layer--interior-light" id="tl-interior-light">
           <img src="./img/assets/train/interior-light.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 07: Window glass ── -->
-        <div class="train-layer train-layer--window-glass" id="tl-window-glass">
+        <!-- LAYER 07: Window glass — hidden -->
+        <div class="train-layer train-layer--window-glass" id="tl-window-glass" aria-hidden="true">
           <img src="./img/assets/train/window-glass.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 08: Window reflections ── -->
+        <!-- LAYER 08: Window reflections -->
         <div class="train-layer train-layer--window-reflections" id="tl-window-reflections">
           <img src="./img/assets/train/window-reflections.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 09: Window frames ── -->
+        <!-- LAYER 09: Windows row -->
         <div class="train-layer train-layer--windows" id="tl-windows">
           <img src="./img/assets/train/windows.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 10: Window frame overlay ── -->
-        <div class="train-layer train-layer--window-frame" id="tl-window-frame">
+        <!-- LAYER 10: Window frame — hidden -->
+        <div class="train-layer train-layer--window-frame" id="tl-window-frame" aria-hidden="true">
           <img src="./img/assets/train/window-frame.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 11: Doors — left ── -->
+        <!-- LAYER 11: Doors left -->
         <div class="train-layer train-layer--doors-left" id="tl-doors-left">
           <img src="./img/assets/train/doors-left.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 12: Doors — right ── -->
+        <!-- LAYER 12: Doors right -->
         <div class="train-layer train-layer--doors-right" id="tl-doors-right">
           <img src="./img/assets/train/doors-right.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 13: Warning decals ── -->
+        <!-- LAYER 13: Warning decals — suppressed to near-invisible -->
         <div class="train-layer train-layer--warning-decals" id="tl-warning-decals">
           <img src="./img/assets/train/warning-decals.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 14: Car number ── -->
-        <div class="train-layer train-layer--car-number" id="tl-car-number">
+        <!-- LAYER 14: Car number — hidden -->
+        <div class="train-layer train-layer--car-number" id="tl-car-number" aria-hidden="true">
           <img src="./img/assets/train/car-number.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 15: Destination sign (blank for now) ── -->
-        <div class="train-layer train-layer--destination" id="tl-destination">
+        <!-- LAYER 15: Destination sign — hidden -->
+        <div class="train-layer train-layer--destination" id="tl-destination" aria-hidden="true">
           <img src="./img/assets/train/destination-sign.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 16: Roof equipment ── -->
+        <!-- LAYER 16: Roof equipment -->
         <div class="train-layer train-layer--roof" id="tl-roof">
           <img src="./img/assets/train/roof-equipment.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 17: Headlights ── -->
+        <!-- LAYER 17: Headlights -->
         <div class="train-layer train-layer--headlights" id="tl-headlights">
           <img src="./img/assets/train/headlights.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 18: Coupling ── -->
+        <!-- LAYER 18: Coupling -->
         <div class="train-layer train-layer--coupling" id="tl-coupling">
           <img src="./img/assets/train/coupling.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 19: Brake sparks (hidden until braking) ── -->
+        <!-- LAYER 19: Brake sparks -->
         <div class="train-layer train-layer--brake-sparks" id="tl-brake-sparks">
           <img src="./img/assets/train/brake-sparks.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 20: Door steam (reserved for Milestone 3) ── -->
+        <!-- LAYER 20: Door steam (Milestone 3) -->
         <div class="train-layer train-layer--door-steam" id="tl-door-steam">
           <img src="./img/assets/train/door-steam.png" alt="" draggable="false" />
         </div>
 
-        <!-- ── LAYER 21: Motion blur overlay (moving only) ── -->
+        <!-- LAYER 21: Motion blur overlay -->
         <div class="train-layer train-layer--motion-blur" id="tl-motion-blur">
           <img src="./img/assets/train/motion-blur-overlay.png" alt="" draggable="false" />
         </div>
@@ -278,7 +267,6 @@
 
   <div class="page-transition-overlay" id="page-transition-overlay" aria-hidden="true"></div>
 
-  <!-- Scripts: order matters — work.js sets STATION, train.js builds, animations.js runs -->
   <script type="module" src="./js/main.js"></script>
   <script src="./js/work.js"></script>
   <script src="./js/train.js"></script>

@@ -1,52 +1,25 @@
 /* ============================================================
-   WORK PAGE — Milestone 1: Subway Station Environment
-   ============================================================
-   Architecture:
-     .station              — full-viewport root
-       .env-layer--wall    — Layer 1: subway wall + graffiti + neons
-       .env-layer--platform— Layer 2: platform structure
-       .env-layer--tracks  — Layer 3: track bed
-       .env-layer--foreground — Layer 4: foreground frame + vignette
-       .env-atmosphere     — CSS-only light cones + grain
-       .platform-floor     — CSS platform edge & surface
-       .hud                — overlay HUD (terminal, board, hint)
-       .train-container    — empty: Milestone 2
-       .ui-container       — empty: Milestone 3
-       .fx-container       — empty: Milestone 4
-       .dot-nav            — empty: Milestone 4
-       .mobile-nav         — empty: Milestone 4
+   WORK PAGE — work.css
    ============================================================ */
 
 /* ── DESIGN TOKENS ───────────────────────────────────────── */
 :root {
-  /* Station palette */
   --col-void:       #06050a;
   --col-wall:       #0d0b14;
   --col-surface:    #111015;
-
-  /* Accent: neon pink */
   --col-pink:       #FF1F9A;
   --col-pink-dim:   rgba(255, 31, 154, 0.35);
-
-  /* Accent: neon green */
   --col-green:      #4aff8c;
   --col-green-dim:  rgba(74, 255, 140, 0.3);
-
-  /* Amber: arrival board */
   --col-amber:      #ffc400;
   --col-amber-dim:  rgba(255, 196, 0, 0.45);
-
-  /* Typography */
-  --font-mono:   'Share Tech Mono', monospace;
-  --font-grunge: 'Boogaloo', sans-serif;
-
-  /* Z-index stack */
+  --font-mono:      'Share Tech Mono', monospace;
+  --font-grunge:    'Boogaloo', sans-serif;
   --z-wall:        1;
   --z-platform:    2;
   --z-tracks:      3;
   --z-foreground:  4;
   --z-atmosphere:  5;
-  --z-floor:       6;
   --z-train:       10;
   --z-ui:          15;
   --z-hud:         30;
@@ -71,10 +44,6 @@
 
 /* ══════════════════════════════════════════════════════════
    ENVIRONMENT LAYERS
-   All layers are position:absolute, inset:0, stacked by z-index.
-   Each holds one <img class="env-img"> that fills its layer via
-   object-fit:cover.  Additional SVG/CSS decoration sits on top
-   inside the same layer div.
 ══════════════════════════════════════════════════════════ */
 
 .env-layer {
@@ -92,75 +61,42 @@
   object-position: center bottom;
   user-select: none;
   pointer-events: none;
-  /* Subtle desaturation so graffiti colours pop against photos */
   filter: saturate(0.75) brightness(0.72);
 }
 
-/* Layer 1 — Wall */
-.env-layer--wall       { z-index: var(--z-wall); }
+.env-layer--wall     { z-index: var(--z-wall); }
 
-/* Layer 2 — Platform structure */
-.env-layer--platform   { z-index: var(--z-platform); }
+.env-layer--platform { z-index: var(--z-platform); }
 .env-layer--platform .env-img {
-  /* Platform sits in lower two-thirds */
   object-position: center 80%;
-  /* Slightly more brightness than wall so it reads as closer */
   filter: saturate(0.7) brightness(0.65);
 }
 
-/* Layer 3 — Tracks */
-.env-layer--tracks     { z-index: var(--z-tracks); }
+.env-layer--tracks   { z-index: var(--z-tracks); }
 .env-layer--tracks .env-img {
-  position: center 100%;
+  object-position: center 100%;
   filter: saturate(0.6) brightness(0.55);
 }
 
-/* Layer 4 — Foreground */
 .env-layer--foreground { z-index: var(--z-foreground); }
 .env-layer--foreground .env-img {
   object-position: center 100%;
-  /* Foreground is darker; it frames the scene */
   filter: saturate(0.55) brightness(0.45);
 }
 
-/* Cinematic vignette painted over the foreground image */
 .foreground-vignette {
   position: absolute;
   inset: 0;
   background:
-    /* Bottom darkness — ground feels heavy */
-    linear-gradient(
-      to top,
-      rgba(6, 5, 10, 0.92) 0%,
-      rgba(6, 5, 10, 0.6)  18%,
-      transparent          42%
-    ),
-    /* Top darkness — ceiling */
-    linear-gradient(
-      to bottom,
-      rgba(6, 5, 10, 0.82) 0%,
-      rgba(6, 5, 10, 0.4)  16%,
-      transparent          38%
-    ),
-    /* Left tunnel mouth */
-    linear-gradient(
-      to right,
-      rgba(6, 5, 10, 0.9)  0%,
-      rgba(6, 5, 10, 0.5)  12%,
-      transparent          32%
-    ),
-    /* Right tunnel mouth */
-    linear-gradient(
-      to left,
-      rgba(6, 5, 10, 0.9)  0%,
-      rgba(6, 5, 10, 0.5)  12%,
-      transparent          32%
-    );
+    linear-gradient(to top,    rgba(6,5,10,0.92) 0%, rgba(6,5,10,0.6) 18%, transparent 42%),
+    linear-gradient(to bottom, rgba(6,5,10,0.82) 0%, rgba(6,5,10,0.4) 16%, transparent 38%),
+    linear-gradient(to right,  rgba(6,5,10,0.9)  0%, rgba(6,5,10,0.5) 12%, transparent 32%),
+    linear-gradient(to left,   rgba(6,5,10,0.9)  0%, rgba(6,5,10,0.5) 12%, transparent 32%);
   pointer-events: none;
 }
 
 /* ══════════════════════════════════════════════════════════
-   GRAFFITI LAYER (inside .env-layer--wall)
+   GRAFFITI
 ══════════════════════════════════════════════════════════ */
 
 .graffiti-svg {
@@ -171,63 +107,21 @@
   pointer-events: none;
 }
 
-/* Base tag style — all graffiti inherits this */
-.g-tag {
-  font-family: var(--font-grunge);
-  paint-order: stroke fill;
-  fill-opacity: 0.82;
-}
+.g-tag       { font-family: var(--font-grunge); paint-order: stroke fill; fill-opacity: 0.82; }
+.g-tag--sm   { font-size: 17px; }
+.g-tag--md   { font-size: 38px; }
+.g-tag--lg   { font-size: 58px; }
+.g-tag--xl   { font-size: 72px; }
+.g-tag--xxl  { font-size: 108px; font-style: italic; }
 
-/* Size modifiers */
-.g-tag--sm  { font-size: 17px; }
-.g-tag--md  { font-size: 38px; }
-.g-tag--lg  { font-size: 58px; }
-.g-tag--xl  { font-size: 72px; }
-.g-tag--xxl { font-size: 108px; font-style: italic; }
+.g-pink        { fill: var(--col-pink); stroke: rgba(100,0,50,0.9); stroke-width: 3.5px; fill-opacity: 0.78; }
+.g-green       { fill: var(--col-green); stroke: rgba(0,40,20,0.9); stroke-width: 4px; fill-opacity: 0.72; }
+.g-green-bright{ fill: #00ff66; stroke: rgba(0,40,15,0.8); stroke-width: 2px; fill-opacity: 0.68; }
+.g-orange      { fill: #ff6b1a; stroke: rgba(80,28,0,0.9); stroke-width: 2px; fill-opacity: 0.82; }
+.g-dim         { fill: rgba(255,255,255,0.11); font-size: 15px; letter-spacing: 0.1em; }
+.g-outline     { fill: transparent; stroke: rgba(255,90,40,0.18); stroke-width: 2px; font-style: italic; }
 
-/* Colour / style variants */
-.g-pink {
-  fill: var(--col-pink);
-  stroke: rgba(100, 0, 50, 0.9);
-  stroke-width: 3.5px;
-  fill-opacity: 0.78;
-}
-
-.g-green {
-  fill: var(--col-green);
-  stroke: rgba(0, 40, 20, 0.9);
-  stroke-width: 4px;
-  fill-opacity: 0.72;
-}
-
-.g-green-bright {
-  fill: #00ff66;
-  stroke: rgba(0, 40, 15, 0.8);
-  stroke-width: 2px;
-  fill-opacity: 0.68;
-}
-
-.g-orange {
-  fill: #ff6b1a;
-  stroke: rgba(80, 28, 0, 0.9);
-  stroke-width: 2px;
-  fill-opacity: 0.82;
-}
-
-.g-dim {
-  fill: rgba(255, 255, 255, 0.11);
-  font-size: 15px;
-  letter-spacing: 0.1em;
-}
-
-.g-outline {
-  fill: transparent;
-  stroke: rgba(255, 90, 40, 0.18);
-  stroke-width: 2px;
-  font-style: italic;
-}
-
-/* ── NEON STRIP LIGHTS ───────────────────────────────────── */
+/* ── NEON STRIPS ─────────────────────────────────────────── */
 
 .neon-strip {
   position: absolute;
@@ -237,46 +131,26 @@
   border-radius: 2px;
   pointer-events: none;
 }
-
 .neon-strip--left {
   left: 13.5%;
   background: linear-gradient(180deg, transparent 0%, var(--col-pink) 40%, transparent 100%);
-  box-shadow:
-    0 0 16px var(--col-pink),
-    0 0 48px var(--col-pink-dim);
+  box-shadow: 0 0 16px var(--col-pink), 0 0 48px var(--col-pink-dim);
   animation: neon-flicker-l 7s ease-in-out infinite;
 }
-
 .neon-strip--right {
   right: 11%;
   background: linear-gradient(180deg, transparent 0%, var(--col-green) 40%, transparent 100%);
-  box-shadow:
-    0 0 16px var(--col-green),
-    0 0 48px var(--col-green-dim);
+  box-shadow: 0 0 16px var(--col-green), 0 0 48px var(--col-green-dim);
   animation: neon-flicker-r 9s ease-in-out 2s infinite;
 }
-
 @keyframes neon-flicker-l {
-  0%,  100% { opacity: 0.52; }
-  18%        { opacity: 0.28; }
-  20%        { opacity: 0.58; }
-  48%        { opacity: 0.44; }
-  80%        { opacity: 0.52; }
-  84%        { opacity: 0.18; }
-  86%        { opacity: 0.55; }
+  0%,100%{opacity:.52}18%{opacity:.28}20%{opacity:.58}48%{opacity:.44}80%{opacity:.52}84%{opacity:.18}86%{opacity:.55}
 }
-
 @keyframes neon-flicker-r {
-  0%,  100% { opacity: 0.40; }
-  25%        { opacity: 0.22; }
-  27%        { opacity: 0.46; }
-  60%        { opacity: 0.36; }
-  88%        { opacity: 0.15; }
-  90%        { opacity: 0.44; }
+  0%,100%{opacity:.40}25%{opacity:.22}27%{opacity:.46}60%{opacity:.36}88%{opacity:.15}90%{opacity:.44}
 }
 
 /* ── PAINT DRIPS ─────────────────────────────────────────── */
-
 .drip {
   position: absolute;
   width: 2px;
@@ -286,8 +160,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════
-   ATMOSPHERE (light cones + grain)
-   z-index: --z-atmosphere (above all env layers, below floor)
+   ATMOSPHERE
 ══════════════════════════════════════════════════════════ */
 
 .env-atmosphere {
@@ -297,29 +170,24 @@
   pointer-events: none;
 }
 
-/* Overhead ceiling spotlights */
 .light-cone {
   position: absolute;
   top: 0;
   width: 340px;
   height: 70%;
   clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 235, 180, 0.045) 0%,
-    rgba(255, 220, 120, 0.018) 55%,
+  background: linear-gradient(to bottom,
+    rgba(255,235,180,0.045) 0%,
+    rgba(255,220,120,0.018) 55%,
     transparent 100%
   );
 }
-
 .light-cone--left  { left:  14%; }
 .light-cone--right { right: 12%; }
 
-/* Film grain overlay — gives photographic grit */
 .grain-overlay {
   position: absolute;
   inset: 0;
-  /* SVG noise via data URI — repeating tile, very subtle */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
@@ -328,114 +196,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════
-   PLATFORM FLOOR
-   Sits above track layer, below HUD and train.
-   Pure CSS — no image asset needed for this strip.
-══════════════════════════════════════════════════════════ */
-
-.platform-floor {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--z-floor);
-  pointer-events: none;
-}
-
-.platform-edge {
-  height: 7px;
-  background: linear-gradient(
-    90deg,
-    #181818 0%,
-    #2c2c2c 15%,
-    #242424 40%,
-    #2c2c2c 70%,
-    #1a1a1a 100%
-  );
-  border-top: 2px solid rgba(255, 255, 255, 0.10);
-  box-shadow:
-    0 -6px 28px rgba(0, 0, 0, 0.9),
-    0 -1px  0   rgba(255, 255, 255, 0.05);
-}
-
-.platform-surface {
-  height: 52px;
-  background:
-    /* Subtle tile seam grid */
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.018) 0px,
-      rgba(255, 255, 255, 0.018) 1px,
-      transparent 1px,
-      transparent 64px
-    ),
-    /* Surface gradient — slightly lighter at top so edge reads */
-    linear-gradient(180deg, #1e1b1b 0%, #141111 100%);
-  position: relative;
-}
-
-/* Dashed yellow safety line */
-.safety-line {
-  position: absolute;
-  top: 10px;
-  left: 4%;
-  right: 4%;
-  height: 3px;
-  background: repeating-linear-gradient(
-    90deg,
-    #c49a00 0px,
-    #c49a00 26px,
-    transparent 26px,
-    transparent 38px
-  );
-  opacity: 0.48;
-}
-
-/* Puddle reflections — neon light caught in wet concrete */
-.puddle {
-  position: absolute;
-  bottom: 8px;
-  border-radius: 50%;
-  filter: blur(3px);
-}
-
-.puddle--1 {
-  left: 20%;
-  width: 90px;
-  height: 18px;
-  background: radial-gradient(ellipse,
-    rgba(255, 31, 154, 0.20) 0%,
-    rgba(74, 255, 140, 0.08) 55%,
-    transparent 80%
-  );
-}
-
-.puddle--2 {
-  right: 25%;
-  width: 64px;
-  height: 13px;
-  background: radial-gradient(ellipse,
-    rgba(74, 255, 140, 0.18) 0%,
-    rgba(255, 31, 154, 0.07) 60%,
-    transparent 80%
-  );
-}
-
-.puddle--3 {
-  left: 48%;
-  width: 40px;
-  height: 9px;
-  background: radial-gradient(ellipse,
-    rgba(255, 196, 0, 0.12) 0%,
-    transparent 75%
-  );
-}
-
-/* ══════════════════════════════════════════════════════════
    HUD OVERLAY
-   Navigation bar sits in front of everything via main.css.
-   The HUD sits just below the nav (top padding 64px matches
-   nav height).
 ══════════════════════════════════════════════════════════ */
 
 .hud {
@@ -447,30 +208,27 @@
   justify-content: space-between;
   padding: 68px 24px 0;
   gap: 14px;
-  pointer-events: none; /* children re-enable as needed */
+  pointer-events: none;
 }
 
-/* ── TERMINAL LOG ─────────────────────────────── */
 .hud-terminal {
   width: 224px;
   flex-shrink: 0;
   font-family: var(--font-mono);
-  background: rgba(0, 0, 0, 0.72);
-  border: 1px solid rgba(74, 255, 140, 0.18);
+  background: rgba(0,0,0,0.72);
+  border: 1px solid rgba(74,255,140,0.18);
   border-radius: 3px;
   overflow: hidden;
   pointer-events: auto;
 }
-
 .hud-terminal__bar {
-  background: rgba(74, 255, 140, 0.09);
+  background: rgba(74,255,140,0.09);
   color: var(--col-green);
   font-size: 9px;
   letter-spacing: 0.16em;
   padding: 5px 10px;
-  border-bottom: 1px solid rgba(74, 255, 140, 0.13);
+  border-bottom: 1px solid rgba(74,255,140,0.13);
 }
-
 .hud-terminal__body {
   padding: 8px 10px;
   display: flex;
@@ -478,138 +236,38 @@
   gap: 2px;
 }
 
-/* Terminal lines */
-.tl {
-  margin: 0;
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.38);
-  letter-spacing: 0.04em;
-  line-height: 1.55;
-}
-
+.tl         { margin: 0; font-size: 9px; color: rgba(255,255,255,0.38); letter-spacing: 0.04em; line-height: 1.55; }
 .tl--ok     { color: var(--col-green); }
+.tl--cursor { color: var(--col-green); animation: cursor-blink 1.1s step-end infinite; }
+@keyframes cursor-blink { 0%,100%{opacity:1}50%{opacity:0} }
 
-.tl--cursor {
-  color: var(--col-green);
-  animation: cursor-blink 1.1s step-end infinite;
-}
-
-@keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-
-/* ── ARRIVAL BOARD ───────────────────────────────────────── */
 .hud-board {
   flex: 1;
   max-width: 540px;
   background: #08080a;
-  border: 1px solid rgba(255, 196, 0, 0.18);
+  border: 1px solid rgba(255,196,0,0.18);
   border-radius: 3px;
   overflow: hidden;
   font-family: var(--font-mono);
-  box-shadow:
-    0 0 32px rgba(255, 180, 0, 0.07),
-    inset 0 0 24px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 32px rgba(255,180,0,0.07), inset 0 0 24px rgba(0,0,0,0.85);
   pointer-events: auto;
 }
+.hud-board__row         { display: flex; align-items: center; gap: 14px; padding: 9px 16px; }
+.hud-board__row--now    { background: rgba(255,180,0,0.055); }
+.hud-board__divider     { height: 1px; background: rgba(255,196,0,0.09); }
+.board-label { font-size: 8.5px; letter-spacing: 0.22em; color: var(--col-amber-dim); text-transform: uppercase; min-width: 96px; flex-shrink: 0; }
+.board-name  { font-size: 24px; color: var(--col-amber); letter-spacing: 0.09em; text-shadow: 0 0 22px rgba(255,196,0,0.55); transition: opacity 0.2s ease; }
+.board-next  { font-size: 13px; color: rgba(255,196,0,0.60); letter-spacing: 0.06em; flex: 1; }
+.board-eta   { font-size: 10px; color: rgba(255,196,0,0.38); letter-spacing: 0.08em; margin-left: auto; }
 
-.hud-board__row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 9px 16px;
-}
-
-.hud-board__row--now {
-  background: rgba(255, 180, 0, 0.055);
-}
-
-.hud-board__divider {
-  height: 1px;
-  background: rgba(255, 196, 0, 0.09);
-}
-
-.board-label {
-  font-size: 8.5px;
-  letter-spacing: 0.22em;
-  color: var(--col-amber-dim);
-  text-transform: uppercase;
-  min-width: 96px;
-  flex-shrink: 0;
-}
-
-.board-name {
-  font-size: 24px;
-  color: var(--col-amber);
-  letter-spacing: 0.09em;
-  text-shadow: 0 0 22px rgba(255, 196, 0, 0.55);
-  transition: opacity 0.2s ease;
-}
-
-.board-next {
-  font-size: 13px;
-  color: rgba(255, 196, 0, 0.60);
-  letter-spacing: 0.06em;
-  flex: 1;
-}
-
-.board-eta {
-  font-size: 10px;
-  color: rgba(255, 196, 0, 0.38);
-  letter-spacing: 0.08em;
-  margin-left: auto;
-}
-
-/* ── KEYBOARD HINT ───────────────────────────────────────── */
-.hud-hint {
-  width: 158px;
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-end;
-}
-
-.hint-row {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  justify-content: flex-end;
-}
-
-.hint-key {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 26px;
-  height: 22px;
-  padding: 0 5px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 3px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.45);
-  background: rgba(255, 255, 255, 0.05);
-  white-space: nowrap;
-}
-
-.hint-desc {
-  font-size: 8px;
-  color: rgba(255, 255, 255, 0.28);
-  letter-spacing: 0.12em;
-  line-height: 1.35;
-  text-align: left;
-}
-
-.hint-sub {
-  color: rgba(255, 255, 255, 0.15);
-}
+.hud-hint { width: 158px; flex-shrink: 0; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.hint-row { display: flex; align-items: center; gap: 9px; justify-content: flex-end; }
+.hint-key { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 22px; padding: 0 5px; border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05); white-space: nowrap; }
+.hint-desc { font-size: 8px; color: rgba(255,255,255,0.28); letter-spacing: 0.12em; line-height: 1.35; text-align: left; }
+.hint-sub  { color: rgba(255,255,255,0.15); }
 
 /* ══════════════════════════════════════════════════════════
-   EMPTY CONTAINERS (Milestone 2–4 placeholders)
-   Correct z-indexes so they slot in without CSS changes later.
+   CONTAINERS
 ══════════════════════════════════════════════════════════ */
 
 .train-container {
@@ -617,23 +275,21 @@
   inset: 0;
   z-index: var(--z-train);
   pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  /*
+    No platform-floor HTML element any more.
+    Nudge the train up slightly so it sits on the
+    platform visible in the background images.
+    Adjust this single value if it looks too high/low.
+  */
+  padding-bottom: 12%;
 }
 
-.ui-container {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-ui);
-  pointer-events: none;
-}
+.ui-container { position: absolute; inset: 0; z-index: var(--z-ui);        pointer-events: none; }
+.fx-container { position: absolute; inset: 0; z-index: var(--z-atmosphere); pointer-events: none; }
 
-.fx-container {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-atmosphere);
-  pointer-events: none;
-}
-
-/* ── DOT NAVIGATION ─────────────────────────────────────── */
 .dot-nav {
   position: fixed;
   right: 24px;
@@ -645,7 +301,6 @@
   align-items: center;
 }
 
-/* ── MOBILE ARROW BUTTONS ────────────────────────────────── */
 .mobile-nav {
   position: fixed;
   bottom: 18px;
@@ -655,233 +310,286 @@
   display: none;
   gap: 14px;
 }
-
 .mnav-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.6);
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 17px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.6);
+  color: rgba(255,255,255,0.55);
+  font-size: 17px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
   transition: border-color 0.2s, color 0.2s;
   backdrop-filter: blur(8px);
 }
-
-.mnav-btn:hover {
-  border-color: var(--col-pink);
-  color: var(--col-pink);
-}
-
-/* ══════════════════════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════════════════════ */
-
-@media (max-width: 900px) {
-  .hud-terminal { width: 190px; }
-  .hud-hint     { width: 130px; }
-  .hud-board    { max-width: 100%; }
-}
-
-@media (max-width: 768px) {
-  .hud-terminal { display: none; }
-  .hud-hint     { display: none; }
-  .mobile-nav   { display: flex; }
-
-  .hud {
-    justify-content: center;
-    padding: 60px 12px 0;
-  }
-
-  .hud-board {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .board-name  { font-size: 18px; }
-  .board-label { min-width: 72px; font-size: 7.5px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   REDUCED MOTION
-══════════════════════════════════════════════════════════ */
-
-@media (prefers-reduced-motion: reduce) {
-  .neon-strip,
-  .tl--cursor {
-    animation: none !important;
-  }
-}
-
+.mnav-btn:hover { border-color: var(--col-pink); color: var(--col-pink); }
 
 /* ============================================================
-   MILESTONE 2 — TRAIN ASSEMBLY & ANIMATION
+   MILESTONE 2 — TRAIN
    ============================================================
-   Section map:
-     1. Train container & wrapper
-     2. Train layer base rules
-     3. Individual layer overrides (opacity, z-index, blend)
-     4. Animation keyframes
-     5. Animation utility classes (JS adds/removes these)
-     6. Responsive train scaling
+
+   Design rule: the train exterior should read as
+   STEEL → WINDOWS → DOORS → (subtle detail).
+   Decals and signage are suppressed to ~15% visual weight.
+   The project content revealed in M3 is the hero.
+
+   Layer visibility decisions:
+     VISIBLE:   base, bogies, windows, doors-left, doors-right,
+                coupling, headlights, interior, interior-light,
+                window-reflections, brake-sparks, door-steam,
+                motion-blur
+     HIDDEN:    access-panels (too noisy),
+                door-track (too noisy — clips above body),
+                window-frame (single frame, wrong scale),
+                window-glass (opaque, covers everything),
+                car-number (noise),
+                destination-sign (noise),
+                warning-decals (suppressed to near-invisible
+                                near doors only via opacity)
    ============================================================ */
 
-/* ── 1. TRAIN CONTAINER & WRAPPER ────────────────────────── */
+/* ── TRAIN WRAPPER ───────────────────────────────────────── */
 
-/*
-  .train-container already positioned/z-indexed in M1.
-  We just need to align the train within it.
-*/
-.train-container {
-  /* Allow pointer events so future UI inside train works */
-  pointer-events: none;
-  display: flex;
-  align-items: flex-end;    /* train sits on the platform floor */
-  justify-content: center;
-  /* Vertically: train bottom aligns with top of platform edge */
-  padding-bottom: 59px;     /* matches .platform-edge (7px) + .platform-surface (52px) */
-}
-
-/*
-  .train — the single movable unit.
-  Everything translates together; JS only touches this element
-  for position. Individual layers animate independently.
-*/
 .train {
   position: relative;
-  /* Intrinsic size set by the base SVG asset dimensions.
-     We use a CSS custom property so responsive code can change one value. */
   --train-width:  1100px;
-  --train-height: 733px;
+  --train-height: 280px;   /* ~17% shorter than before */
 
   width:  var(--train-width);
   height: var(--train-height);
   flex-shrink: 0;
 
-  /* Start far off-screen to the left */
   transform: translate3d(calc(-50vw - var(--train-width)), 0, 0);
-  /* No transition here — JS controls movement via Web Animations API */
   will-change: transform;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-/* ── 2. TRAIN LAYER BASE RULES ───────────────────────────── */
+/* ── LAYER BASE ──────────────────────────────────────────── */
 
-/*
-  Every .train-layer is absolute, fills the train box, and
-  positions its img to fill. No transition by default — the
-  JS animation system handles movement; CSS transitions handle
-  opacity fades on individual layers.
-*/
 .train-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 
 .train-layer img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: fill;
-  object-position: center bottom;
+  object-fit: cover;
+  object-position: center 40%;
   user-select: none;
   pointer-events: none;
-  /* GPU-accelerate the img itself for opacity changes */
   will-change: opacity;
 }
 
-/* ── 3. INDIVIDUAL LAYER OVERRIDES ──────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   LAYER RULES
+══════════════════════════════════════════════════════════ */
 
-/* Interior light — hidden until train stops, then fades in */
+/* ── BASE BODY ───────────────────────────────────────────── */
+/* train-rebase: art at y:27%–73% of 1536×1024 canvas */
+.train-layer--base img {
+  object-position: center 40%;
+}
+
+/* ── WINDOWS ROW ─────────────────────────────────────────── */
+/* windows: 4-window strip at y:20%–60% of canvas */
+.train-layer--windows img {
+  object-position: center 28%;
+}
+
+/* ── INTERIOR — behind windows ───────────────────────────── */
+/* Full interior scene — sits behind the body */
+.train-layer--interior {
+  z-index: -1;
+}
+.train-layer--interior img {
+  object-position: center 40%;
+}
+
+/* ── WHEEL BOGIES ────────────────────────────────────────── */
+/* Art at y:15%–75%. Protrudes below car body. */
+.train-layer--bogies {
+  top: auto;
+  bottom: -18%;
+  left: 8%;
+  right: 8%;
+  width: 84%;
+  height: 52%;
+}
+.train-layer--bogies img {
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* ── ROOF EQUIPMENT ──────────────────────────────────────── */
+/* Art is bottom-anchored on canvas (y:55%–100%).
+   Shift the layer so the art crowns just above the train roof. */
+.train-layer--roof {
+  top: -22%;
+  height: 55%;
+  bottom: auto;
+}
+.train-layer--roof img {
+  object-fit: cover;
+  object-position: center 100%;
+}
+
+/* ── DOORS ───────────────────────────────────────────────── */
+/* doors-left: art at x:28%–58%, portrait, left-of-center canvas */
+.train-layer--doors-left {
+  top: 0;
+  bottom: 18%;
+  left: 0;
+  width: 50%;
+  height: 82%;
+}
+.train-layer--doors-left img {
+  object-fit: contain;
+  object-position: right center;
+}
+
+/* doors-right: art at x:42%–72%, portrait, right-of-center canvas */
+.train-layer--doors-right {
+  top: 0;
+  bottom: 18%;
+  right: 0;
+  left: auto;
+  width: 50%;
+  height: 82%;
+}
+.train-layer--doors-right img {
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* ── COUPLING ────────────────────────────────────────────── */
+/* Art centered on canvas (x:10%–90%, y:20%–80%).
+   Sits at the left end (front) of the train. */
+.train-layer--coupling {
+  top: 28%;
+  left: -5%;
+  width: 16%;
+  height: 44%;
+  bottom: auto;
+  right: auto;
+  z-index: 2;
+}
+.train-layer--coupling img {
+  object-fit: contain;
+  object-position: center center;
+}
+
+/* ── HEADLIGHTS ──────────────────────────────────────────── */
+/* Two units side-by-side (x:12%–88%, y:20%–80%).
+   Front-left of the car. */
+.train-layer--headlights {
+  top: 18%;
+  left: 0;
+  width: 20%;
+  height: 44%;
+  bottom: auto;
+  right: auto;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  mix-blend-mode: screen;
+}
+.train-layer--headlights img {
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* ── WARNING DECALS — suppressed ─────────────────────────── */
+/* Present in DOM for M3 but nearly invisible on exterior.
+   Very low opacity so they read as worn paint, not signage. */
+.train-layer--warning-decals {
+  opacity: 0.06;
+}
+.train-layer--warning-decals img {
+  object-position: center 40%;
+}
+
+/* ── HIDDEN LAYERS ───────────────────────────────────────── */
+/* These layers exist in the DOM (JS may reference them)
+   but are invisible on the exterior. */
+.train-layer--access-1,
+.train-layer--access-2,
+.train-layer--door-track,
+.train-layer--window-frame,
+.train-layer--window-glass,
+.train-layer--car-number,
+.train-layer--destination {
+  display: none;
+}
+
+/* ── EFFECT OVERLAYS ─────────────────────────────────────── */
+
+/* Interior light — warm glow, screened */
 .train-layer--interior-light {
   opacity: 0;
   transition: opacity 1.2s ease;
   mix-blend-mode: screen;
 }
-.train-layer--interior-light.is-lit {
-  opacity: 1;
-}
+.train-layer--interior-light img { object-position: center 48%; }
+.train-layer--interior-light.is-lit { opacity: 0.7; }
 
-/* Headlights — hidden on load, fade in as train approaches */
-.train-layer--headlights {
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  mix-blend-mode: screen;
-}
-.train-layer--headlights.is-approaching {
-  opacity: 0.9;
-}
-.train-layer--headlights.is-stopped {
-  opacity: 0.55;   /* dims slightly once stationary */
-  transition: opacity 1.4s ease;
-}
-
-/* Window reflections — subtle horizontal shift while moving,
-   handled by JS via CSS custom property */
+/* Window reflections — screen blend, JS shifts while moving */
 .train-layer--window-reflections {
   transition: transform 0.4s ease, opacity 0.3s ease;
   mix-blend-mode: screen;
-  opacity: 0.6;
+  opacity: 0.45;
 }
+.train-layer--window-reflections img { object-position: center 35%; }
 
-/* Brake sparks — invisible by default, shown briefly by JS */
+/* Brake sparks — lighten blend knocks out white bg */
 .train-layer--brake-sparks {
   opacity: 0;
-  /* No transition — we want an instant flash, not a fade */
-  mix-blend-mode: screen;
+  mix-blend-mode: lighten;
+  top: auto;
+  bottom: 5%;
+  height: 45%;
+  left: 0;
+  width: 38%;
+  right: auto;
 }
-.train-layer--brake-sparks.is-sparking {
-  opacity: 1;
+.train-layer--brake-sparks img {
+  object-fit: contain;
+  object-position: left bottom;
 }
+.train-layer--brake-sparks.is-sparking { opacity: 1; }
 
-/* Door steam — off for entire Milestone 2 */
+/* Door steam — hidden until M3 */
 .train-layer--door-steam {
   opacity: 0;
   pointer-events: none;
+  mix-blend-mode: multiply;
 }
+.train-layer--door-steam img { object-position: center 60%; }
 
-/* Motion blur — visible only while moving */
+/* Motion blur */
 .train-layer--motion-blur {
   opacity: 0;
   transition: opacity 0.35s ease;
   mix-blend-mode: screen;
 }
-.train-layer--motion-blur.is-moving {
-  opacity: 0.85;
+.train-layer--motion-blur.is-moving { opacity: 0.85; }
+
+/* ── HEADLIGHT STATES ────────────────────────────────────── */
+.train-layer--headlights.is-approaching { opacity: 0.9; }
+.train-layer--headlights.is-stopped     { opacity: 0.55; transition: opacity 1.4s ease; }
+
+/* Kill ghost blobs unconditionally */
+#tl-brake-sparks img,
+#tl-door-steam img {
+  opacity: 0 !important;
+}
+.train-layer--brake-sparks.is-sparking img {
+  opacity: 1 !important;
 }
 
-/* Destination sign — very faint glow after stopping */
-.train-layer--destination {
-  opacity: 0.3;
-  transition: opacity 1s ease;
-}
-.train-layer--destination.is-lit {
-  opacity: 0.65;
-}
-
-/* Coupling — same canvas as all other layers, stacks automatically */
-.train-layer--coupling {
-  z-index: 2;
-}
-
-/* Bogies — slight vibration layer during braking */
-.train-layer--bogies {
-  will-change: transform;
-}
-
-/* Window glass — blend into layers beneath */
-.train-layer--window-glass {
-  mix-blend-mode: screen;
-  opacity: 0.35;
-}
-
-/* Remove any visible container borders */
 #train-container,
 .train {
   border: none !important;
@@ -889,115 +597,68 @@
   box-shadow: none !important;
 }
 
-/* ── 4. KEYFRAME ANIMATIONS ──────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════════════════════ */
 
-/*
-  Train body settle — tiny vertical suspension drop after stop.
-  Applied to .train itself by JS after arrival.
-*/
 @keyframes train-settle {
-  0%   { transform: translate3d(0, 0, 0); }
-  20%  { transform: translate3d(0, 3px, 0); }
-  45%  { transform: translate3d(0, -1.5px, 0); }
-  70%  { transform: translate3d(0, 1px, 0); }
-  88%  { transform: translate3d(0, -0.5px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0%  { transform: translate3d(0,0,0); }
+  20% { transform: translate3d(0,3px,0); }
+  45% { transform: translate3d(0,-1.5px,0); }
+  70% { transform: translate3d(0,1px,0); }
+  88% { transform: translate3d(0,-0.5px,0); }
+  100%{ transform: translate3d(0,0,0); }
 }
-
-/*
-  Coupling mechanical bounce — applied to .train-layer--coupling
-  after the train body reaches center.
-*/
 @keyframes coupling-bounce {
-  0%   { transform: translate3d(0, 0, 0); }
-  18%  { transform: translate3d(-6px, 0, 0); }
-  38%  { transform: translate3d(3px, 0, 0); }
-  58%  { transform: translate3d(-2px, 0, 0); }
-  76%  { transform: translate3d(1px, 0, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0%  { transform: translate3d(0,0,0); }
+  18% { transform: translate3d(-6px,0,0); }
+  38% { transform: translate3d(3px,0,0); }
+  58% { transform: translate3d(-2px,0,0); }
+  76% { transform: translate3d(1px,0,0); }
+  100%{ transform: translate3d(0,0,0); }
 }
-
-/*
-  Bogie vibration during braking — very subtle, implies friction.
-*/
 @keyframes bogie-brake {
-  0%,  100% { transform: translate3d(0, 0, 0); }
-  20%        { transform: translate3d(1px, 1px, 0); }
-  40%        { transform: translate3d(-1px, 0, 0); }
-  60%        { transform: translate3d(0, 1px, 0); }
-  80%        { transform: translate3d(1px, -1px, 0); }
+  0%,100% { transform: translate3d(0,0,0); }
+  20%     { transform: translate3d(1px,1px,0); }
+  40%     { transform: translate3d(-1px,0,0); }
+  60%     { transform: translate3d(0,1px,0); }
+  80%     { transform: translate3d(1px,-1px,0); }
 }
 
-/* ── 5. ANIMATION UTILITY CLASSES ────────────────────────── */
+.train--settling    { animation: train-settle    0.55s cubic-bezier(0.22,1,0.36,1)    forwards; }
+.coupling--bouncing { animation: coupling-bounce  0.5s  cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.bogies--braking    { animation: bogie-brake      0.28s linear 3; }
 
-/*
-  JS adds .train--settling to .train to play the settle animation.
-  translate3d(0,0,0) here is the resting position — the train's
-  final translateX is applied via inline style by animations.js,
-  so the settle keyframe only moves on Y axis.
-*/
-.train--settling {
-  animation: train-settle 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* JS adds to .train-layer--coupling after arrival */
-.coupling--bouncing {
-  animation: coupling-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* JS adds to .train-layer--bogies during braking */
-.bogies--braking {
-  animation: bogie-brake 0.28s linear 3;
-}
-
-#tl-brake-sparks img,
-#tl-door-steam img {
-  opacity: 0 !important;
-}
-
-#train-container {
-  border: none;
-  outline: none;
-}
-
-.train {
-  border: none;
-  outline: none;
-}
-
-/* ── 6. RESPONSIVE TRAIN SCALING ─────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════ */
 
 @media (max-width: 1200px) {
-  .train {
-    --train-width:  900px;
-    --train-height: 600px;
-  }
+  .train { --train-width: 900px; --train-height: 230px; }
 }
-
 @media (max-width: 900px) {
-  .train {
-    --train-width:  720px;
-    --train-height: 480px;
-  }
-  .train-container {
-    padding-bottom: 52px;
-  }
+  .train { --train-width: 720px; --train-height: 184px; }
+  .hud-terminal { width: 190px; }
+  .hud-hint     { width: 130px; }
 }
-
+@media (max-width: 768px) {
+  .hud-terminal { display: none; }
+  .hud-hint     { display: none; }
+  .mobile-nav   { display: flex; }
+  .hud { justify-content: center; padding: 60px 12px 0; }
+  .hud-board { max-width: 100%; }
+}
 @media (max-width: 600px) {
-  .train {
-    --train-width:  100vw;
-    --train-height: 67vw; /* maintains 3:2 */
-  }
-  .train-container {
-    padding-bottom: 46px;
-  }
+  .train { --train-width: 100vw; --train-height: 29vw; }
+}
+@media (max-width: 480px) {
+  .board-name  { font-size: 18px; }
+  .board-label { min-width: 72px; font-size: 7.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .train,
-  .train-layer,
-  .train-layer img {
+  .neon-strip, .tl--cursor { animation: none !important; }
+  .train, .train-layer, .train-layer img {
     transition-duration: 0.01ms !important;
     animation-duration:  0.01ms !important;
   }
