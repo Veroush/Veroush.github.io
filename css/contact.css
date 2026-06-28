@@ -102,6 +102,7 @@ html, body {
   justify-content: center;
   padding: calc(var(--nav-h) + 24px) 1rem 3rem;
   position: relative;
+  background: url('../img/contactpage_bg.png') center/cover fixed no-repeat;
 }
 
 .page::before {
