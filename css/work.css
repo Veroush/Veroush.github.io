@@ -865,9 +865,22 @@
   opacity: 0.65;
 }
 
-/* Coupling — sits at z-index above base so bounce reads */
+/* Coupling — tight-cropped asset, manually positioned at front-left of train */
 .train-layer--coupling {
   z-index: 2;
+  /* Override the full-fill behaviour used by same-canvas layers */
+  inset: auto;
+  width:  120px;
+  height:  80px;
+  left:   18px;
+  bottom: 10px;
+  top: auto;
+  right: auto;
+}
+.train-layer--coupling img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
 }
 
 /* Bogies — slight vibration layer during braking */
