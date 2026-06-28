@@ -757,7 +757,7 @@
   /* Intrinsic size set by the base SVG asset dimensions.
      We use a CSS custom property so responsive code can change one value. */
   --train-width:  1100px;
-  --train-height: 340px;
+  --train-height: 733px;
 
   width:  var(--train-width);
   height: var(--train-height);
@@ -865,22 +865,9 @@
   opacity: 0.65;
 }
 
-/* Coupling — tight-cropped asset, manually positioned at front-left of train */
+/* Coupling — same canvas as all other layers, stacks automatically */
 .train-layer--coupling {
   z-index: 2;
-  /* Override the full-fill behaviour used by same-canvas layers */
-  inset: auto;
-  width:  120px;
-  height:  80px;
-  left:   18px;
-  bottom: 10px;
-  top: auto;
-  right: auto;
-}
-.train-layer--coupling img {
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
 }
 
 /* Bogies — slight vibration layer during braking */
@@ -983,14 +970,14 @@
 @media (max-width: 1200px) {
   .train {
     --train-width:  900px;
-    --train-height: 280px;
+    --train-height: 600px;
   }
 }
 
 @media (max-width: 900px) {
   .train {
     --train-width:  720px;
-    --train-height: 224px;
+    --train-height: 480px;
   }
   .train-container {
     padding-bottom: 52px;
@@ -1000,7 +987,7 @@
 @media (max-width: 600px) {
   .train {
     --train-width:  100vw;
-    --train-height: 180px;
+    --train-height: 67vw; /* maintains 3:2 */
   }
   .train-container {
     padding-bottom: 46px;
