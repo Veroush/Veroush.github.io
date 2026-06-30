@@ -61,16 +61,22 @@ ul, ol { list-style: none; }
   left: 0;
   right: 0;
   z-index: 100;
+  width: 100%;
+}
 
+.nav__bg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.nav__content {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  background: #fff;
   padding: 0 2.5rem;
-  height: 64px;
-
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
 }
 
 /* Logo — ModularAmplitude */
@@ -459,7 +465,7 @@ h2, h3 {
 
 .experience-projects__note--work {
   position: absolute;      /* was relative */
-  width: 1000px;
+  width: 1170px;
   top: 40px;                
   left: 10px;
 }
@@ -473,8 +479,8 @@ h2, h3 {
 
 .experience-projects__note--work .experience-projects__note-text {
   position: absolute;
-  top: 120px;      /* smaller number = higher up */
-  left: 330px;
+  top: 160px;      /* smaller number = higher up */
+  left: 390px;
   color: black;
 }
 
@@ -486,7 +492,7 @@ h2, h3 {
 }
 
 .experience-projects__note--work .experience-projects__note-text p {
-  margin-bottom: 2rem;   /* increase this number for more space */
+  margin-bottom: 2.7rem;   /* increase this number for more space */
   font-size: 1.6rem; 
 }
 
@@ -497,7 +503,7 @@ h2, h3 {
 
 .experience-projects__note--work .experience-projects__note-text h3 {
   position: relative;
-  top: -30px;          /* negative = moves it up, independent of the p tags below */
+  top: -46px;          /* negative = moves it up, independent of the p tags below */
   left: 0;
   font-size: 2rem;  /* bigger than the p/li text */
   text-decoration: underline;
