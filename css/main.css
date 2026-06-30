@@ -105,6 +105,15 @@ ul, ol { list-style: none; }
   font-family: 'ModularAmplitude', sans-serif;
 }
 
+.nav__logo-img {
+  height: 90px;       
+  width: auto;
+  display: block;
+  position: relative;
+  top: -20px;
+  left: -20px;
+}
+
 /* Section headings — ModularAmplitude, but NOT h1 (.hero__name) */
 h2, h3 {
   font-family: 'ModularAmplitude', sans-serif;
