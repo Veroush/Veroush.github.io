@@ -15,6 +15,20 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'ShinyPaint';
+  src: url('/fonts/ShinyPaint-ZpWEZ.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RightRound';
+  src: url('/fonts/RightRound-Wq7G.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -240,6 +254,8 @@ h2, h3 {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: -250px;
+  background: #111;
 }
 
 .hero__video {
@@ -248,7 +264,8 @@ h2, h3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center 30%;   /* was: center top — nudges the crop point down */
+  transform-origin: center;
   z-index: 0;
 }
 
@@ -269,7 +286,7 @@ h2, h3 {
 /* Hero name stays plain sans-serif — NOT ModularAmplitude */
 .hero__name {
   font-size: clamp(2.5rem, 8vw, 6rem);
-  font-family: sans-serif;
+  font-family: 'ShinyPaint', sans-serif;   
   color: white;
   margin-bottom: 1rem;
 }
@@ -286,7 +303,7 @@ h2, h3 {
 
 .about-strip {
   position: relative;
-  background: #fff;
+  background: linear-gradient(180deg, #3e6881 0%, #d8c9b3 35%, #f5ede1 100%);
   padding: 5rem 3rem 5rem 2rem;
   overflow: hidden;
   min-height: 950px;  /* increase this until nothing gets cut off */
@@ -419,7 +436,7 @@ h2, h3 {
   gap: 2rem;
   flex-wrap: wrap;
   padding: 7rem 2rem 4rem; 
-  background: white;
+  background: linear-gradient(180deg, #f5ede0 0%, #ece2d0 100%);
   min-height: 700px;       /* tune this — smallest value that doesn't clip the notes */
   overflow: hidden;
 }
@@ -535,7 +552,7 @@ h2, h3 {
 
 .skills {
   position: relative;
-  background: white;
+  background: #ece2d0;
   padding: 4rem 2rem;
   text-align: center;
 }
@@ -705,7 +722,7 @@ h2, h3 {
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #fff;
+  background: #ece2d0;
 }
 
 .footer__bg {
@@ -753,4 +770,17 @@ h2, h3 {
 
 .footer__icon:hover {
   transform: scale(1.1);
+}
+
+.roles-list {
+  position: absolute;
+  font-family: 'RightRound', sans-serif;
+  color: purple;
+  font-size: 1.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  top: -4px;       /* positive now — places it inside the section, below the top edge */
+  left: 100px;
+  z-index: 8;
 }
