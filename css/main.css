@@ -533,9 +533,9 @@ h2, h3 {
 /* "My Skills" header with highlighter + flanking icons */
 .skills__title {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
   gap: 1.5rem;
   margin-bottom: 3rem;
   font-family: 'HalfTermSchoolsOut', sans-serif;
@@ -544,15 +544,38 @@ h2, h3 {
 }
 
 .skills__title-icon {
-  width: 50px;        /* size of skills-icon.png on each side */
-  height: 50px;
   object-fit: contain;
+  position: relative;
+}
+
+.skills__title-icon--left {
+  justify-self: end;
+  width: 180px;
+  height: 200px;
+  max-width: none;
+  top: 0px;
+  left: -100px;
+}
+
+.skills__title-icon--right {
+  justify-self: start;
+  width: 180px;
+  height: 200px;
+  max-width: none;
+  top: 0px;
+  left: 100px;
+  transform: rotate(-59deg);
+
 }
 
 .skills__title-text {
   position: relative;
   display: inline-block;
-  z-index: 0;  
+  z-index: 0; 
+  color: #1a1a2e;
+  mix-blend-mode: multiply; 
+  isolation: isolate; 
+  opacity: 0.75;  
 }
 
 /* Highlighter sits behind the text, slightly larger, offset down */
@@ -560,11 +583,13 @@ h2, h3 {
   position: absolute;
   left: 50%;
   top: 55%;
-  transform: translate(-50%, -50%);
-  width: 110%;        /* how far highlighter extends past the text */
+  transform: translate(-50%, -52%);
+  width: 230%;        /* how far highlighter extends past the text */
+  max-width: none; 
   height: auto;
-  z-index: -1;
+  z-index: -1;   
   pointer-events: none;
+  mix-blend-mode: multiply; 
 }
 
 /* Console / laptop frame */
