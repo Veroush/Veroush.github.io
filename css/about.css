@@ -1,7 +1,7 @@
-body {
-  background-image: url('../img/aboutpage/background.png');
+.about-intro {
+  min-height: 150vh; /* or whatever height you want this section to be */
+  background-image: url('../img/aboutpage/background2.png');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* this is the magic line */
   background-repeat: no-repeat;
 }
