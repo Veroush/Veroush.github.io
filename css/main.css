@@ -1,12 +1,6 @@
 /* ============================================================
    main.css
    ============================================================ */
-@font-face {
-  font-family: 'ModularAmplitude';
-  src: url('/fonts/ModularAmplitude-mR6a.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 @font-face {
   font-family: 'HalfTermSchoolsOut';
@@ -95,28 +89,28 @@ ul, ol { list-style: none; }
   padding: 1.5rem 2.5rem 0;
 }
 
-/* Logo — ModularAmplitude */
+/* Logo — ShinyPaint */
 .nav__logo {
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   color: #111;
   flex-shrink: 0;
-  font-family: 'ModularAmplitude', sans-serif;
+  font-family: 'ShinyPaint', sans-serif;
 }
 
 .nav__logo-img {
-  height: 90px;       
+  height: 67px;       
   width: auto;
   display: block;
   position: relative;
-  top: -20px;
+  top: -12px;
   left: -20px;
 }
 
-/* Section headings — ModularAmplitude, but NOT h1 (.hero__name) */
+/* Section headings — ShinyPaint, but NOT h1 (.hero__name) */
 h2, h3 {
-  font-family: 'ModularAmplitude', sans-serif;
+  font-family: 'ShinyPaint', sans-serif;
 }
 
 /* Link list — evenly spaced across the nav */
@@ -124,7 +118,7 @@ h2, h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 5rem;
   flex: 1;
   margin: -30px 0 0;
 }
@@ -139,10 +133,10 @@ h2, h3 {
   padding: 0.45rem 0.9rem;
   border-radius: 8px;
 
-  font-size: 0.9rem;
+  font-size: 1.8rem;
   font-weight: 500;
   color: #555;
-  font-family: 'ModularAmplitude', sans-serif;
+  font-family: 'ShinyPaint', sans-serif;
 
   transition: background 0.15s ease, color 0.15s ease;
 }
@@ -165,11 +159,10 @@ h2, h3 {
   flex-shrink: 0;
 }
 
-.nav__icon--home    { width: var(--icon-home-w);    height: var(--icon-home-h);    }
-.nav__icon--about   { width: var(--icon-about-w);   height: var(--icon-about-h);   }
-.nav__icon--work    { width: var(--icon-work-w);    height: var(--icon-work-h);    }
-.nav__icon--contact { width: var(--icon-contact-w); height: var(--icon-contact-h); }
-
+.nav__icon--home    { width: var(--icon-home-w); height: var(--icon-home-h); position: relative; top: 0px; left: 0px; }
+.nav__icon--about   { width: var(--icon-about-w); height: var(--icon-about-h); position: relative; top: 0px; left: 15px; }
+.nav__icon--work    { width: var(--icon-work-w); height: var(--icon-work-h); position: relative; top: 0px; left: 0px; }
+.nav__icon--contact { width: var(--icon-contact-w); height: var(--icon-contact-h); position: relative; top: 0px; left: 5px; }
 
 /* ============================================================
    HAMBURGER (mobile only)
@@ -292,7 +285,7 @@ h2, h3 {
   padding: 0 1rem;
 }
 
-/* Hero name stays plain sans-serif — NOT ModularAmplitude */
+/* Hero name stays plain sans-serif */
 .hero__name {
   font-size: clamp(2.5rem, 8vw, 6rem);
   font-family: 'ShinyPaint', sans-serif;   
