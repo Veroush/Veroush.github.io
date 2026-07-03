@@ -52,10 +52,15 @@
   position: relative;
   flex: 1;
   max-width: 500px;
+  height: 600px;     /* ← give it a fixed height now that its content is absolute */
 }
 
 .about-story__paramaribo {
-  width: 100%;
+  position: absolute;
+  top: 0;            /* ← up/down */
+  left: 30px;            /* ← left/right */
+  width: 400px;       /* ← size */
+  z-index: 1;          /* keep it BELOW the tape (2) and id (3) */
   display: block;
 }
 
@@ -66,25 +71,24 @@
 }
 
 .about-story__tape--1 {
-  top: -20px;
-  left: 20px;
+  top: -30px;
+  left: 0px;
   transform: rotate(-8deg);
 }
 
 .about-story__tape--2 {
-  top: -20px;
-  right: 20px;
+  top: 220px;
+  right: 40px;
   transform: rotate(6deg);
 }
 
 .about-story__id {
   position: absolute;
-  bottom: -40px;
-  left: 40px;
+  bottom: 510px;     /* ← up/down. Increase = moves down, decrease/more negative = moves up */
+  left: 250px;         /* ← left/right. Increase = moves right, decrease = moves left */
   width: 220px;
-  transform: rotate(-4deg);
+  transform: rotate(9deg);
   z-index: 3;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
 }
 
 /* RIGHT SIDE — text block */
@@ -93,8 +97,29 @@
   font-family: 'HalfTermSchoolsOut', sans-serif;
   font-size: 1.4rem;
   line-height: 1.6;
+  position: relative;
+  top: -200px;          /* ← moves the whole text block up. Increase the number for more, decrease for less */
 }
 
 .about-story__line {
   margin-bottom: 1.2rem;
+}
+
+.about-story__arrow {
+  position: absolute;
+  top: 30%;             /* ← up/down position of the arrow */
+  left: -65px;           /* ← negative = sits outside the image, to its left */
+  width: 100px;            /* ← size of the arrow */
+  z-index: 2;
+}
+
+.about-story__caption {
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-top: 15px;
+  text-align: center;
+  position: relative;
+  top: 300px;      /* ← moves it up/down. Negative = up, positive = down */
+  left: -200px;
 }
