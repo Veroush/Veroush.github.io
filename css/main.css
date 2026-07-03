@@ -724,6 +724,9 @@ h2, h3 {
   position: relative;
   width: 100%;
   overflow: hidden;
+}
+
+.footer--home {
   background: #ece2d0;
 }
 
