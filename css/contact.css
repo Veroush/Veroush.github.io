@@ -74,12 +74,19 @@
   top: 0px;       /* negative = up, positive = down */
 }
 
+.contact-card__bg {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: rotate(-1deg);   /* match this to .contact-card__form below */
+}
+
 .contact-card__form {
   position: absolute;
   inset: 0;
   padding: 10% 8%;
   font-family: 'HalfTermSchoolsOut', sans-serif;
-  transform: rotate(1deg);   /* match the exact value from .contact-card__bg */
+  transform: rotate(0.7deg);   /* match the exact value from .contact-card__bg */
 }
 
 .contact-card__field {
