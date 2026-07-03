@@ -123,3 +123,44 @@
   top: 300px;      /* ← moves it up/down. Negative = up, positive = down */
   left: -200px;
 }
+
+/* ===== About School Section (UNASAT + fair) ===== */
+
+.about-school {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 4rem 5%;
+  margin-top: -250px; /* pulls the whole section up — adjust this one number until the gap looks right */
+}
+
+.about-school__row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.about-school__text {
+  flex: 1;
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.about-school__line {
+  margin-bottom: 1.2rem;
+}
+
+.about-school__arrow {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.about-school__arrow--2 {
+  transform: rotate(90deg);
+}
+
+.about-school__image {
+  width: 400px;
+  flex-shrink: 0;
+}
