@@ -109,7 +109,10 @@
 
             <div class="contact-card__field contact-card__field--message">
               <label for="message">Message:</label>
-              <textarea id="message" name="message" placeholder="Type your message..."></textarea>
+              <div class="contact-card__message-wrap">
+                <textarea id="message" name="message" placeholder="Type your message..."></textarea>
+                <span class="contact-card__fake-caret" id="fake-caret" aria-hidden="true"></span>
+              </div>
             </div>
           </form>
         </div>
@@ -135,5 +138,6 @@
   </footer>
 
   <script src="./js/main.js"></script>
+  <script src="./js/contact.js"></script>
 </body>
 </html>

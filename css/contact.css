@@ -17,7 +17,7 @@
 .contact-hero {
   padding: 2rem 2rem 2rem;
   text-align: center;
-  margin-top: -100px;
+  margin-top: -120px;
 }
 
 .contact-hero__title {
@@ -44,6 +44,9 @@
   flex-direction: column;
   gap: 2rem;
   align-items: center;
+  position: relative;
+  top: 0px;     /* negative = up, positive = down */
+  left: -60px;    /* negative = left, positive = right */
 }
 
 .contact-icons__icon {
@@ -64,17 +67,19 @@
   max-width: 100%;
 }
 
-.contact-card__bg {
-  width: 100%;
-  height: auto;
-  display: block;
+.contact-card {
+  position: relative;
+  width: 750px;   /* bigger = larger postcard, both width and height scale together */
+  max-width: 100%;
+  top: 0px;       /* negative = up, positive = down */
 }
 
 .contact-card__form {
   position: absolute;
   inset: 0;
-  padding: 10% 8%;    /* provisional — nudge to match where lines sit on your postcard art */
+  padding: 10% 8%;
   font-family: 'HalfTermSchoolsOut', sans-serif;
+  transform: rotate(1deg);   /* match the exact value from .contact-card__bg */
 }
 
 .contact-card__field {
@@ -101,6 +106,7 @@
   border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
   flex: 1;
   outline: none;
+  caret-color: #333;   /* makes the blinking cursor clearly visible */
 }
 
 .contact-card__field--message {
@@ -110,9 +116,14 @@
 
 .contact-card__field--message textarea {
   resize: none;
-  height: 120px;
+  min-height: 180px;
+  max-height: 320px;
+  height: auto;
+  overflow-y: hidden;
   border-bottom: none;
   margin-top: 0.5rem;
+  box-sizing: border-box;
+  caret-color: transparent;   /* hidden by default — JS turns it on once you start typing */
 }
 
 .contact-card__field--to input {
@@ -136,6 +147,30 @@
   display: block;
 }
 
+.contact-card__message-wrap {
+  position: relative;
+}
+
+.contact-card__fake-caret {
+  position: absolute;
+  top: 0.6rem;      /* tune to match your padding/line-height */
+  left: 0.15rem;     /* tune to sit right at the textarea's text start */
+  width: 1px;
+  height: 1.3rem;
+  background: #333;
+  display: none;
+  pointer-events: none;
+  animation: contact-caret-blink 1s step-end infinite;
+}
+
+.contact-card__fake-caret.is-visible {
+  display: block;
+}
+
+@keyframes contact-caret-blink {
+  50% { opacity: 0; }
+}
+
 /* Mobile — stack icons horizontally above the postcard */
 @media (max-width: 768px) {
   .contact-form-section {
@@ -146,3 +181,4 @@
     flex-direction: row;
   }
 }
+
