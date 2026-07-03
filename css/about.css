@@ -153,6 +153,12 @@
   left: 50px;      /* positive = right, negative = left */
 }
 
+.about-school__text--fair {
+  position: relative;
+  top: -100px;      /* negative = up, positive = down */
+  left: -50px;      /* positive = right, negative = left */
+}
+
 .about-school__line {
   margin-bottom: 1.2rem;
 }
@@ -174,6 +180,14 @@
   transform: rotate(30deg);   /* positive = clockwise, negative = counter-clockwise. adjust the degree number */
 }
 
+.about-school__arrow--2-big {
+  width: 170px;              /* bigger than the shared 100px — adjust this number for size */
+  position: relative;
+  top: -80px;   
+  left: -30px;                 /* negative = left, positive = right */
+  transform: rotate(200deg);  /* this arrow already rotates 90deg from the shared class — this REPLACES that with a new total angle, adjust the degree number */
+}
+
 .about-school__image {
   width: 400px;
   flex-shrink: 0;
@@ -183,4 +197,28 @@
   width: 480px;           /* bigger than the shared 400px — adjust this number for size */
   position: relative;
   top: -100px;              /* negative = moves up. adjust this number for how far */
+}
+
+.about-school__image--fair {
+  width: 400px;
+  position: relative;
+  top: -50px;               /* negative = moves up. adjust this number for how far */
+}
+
+.about-school__text--havo3 {
+  position: relative;
+  top: -100px;
+  left: 380px;
+}
+
+.about-school__arrow--3 {
+  position: relative;
+  top: -115px;
+  left: 0px;
+}
+
+.about-school__image--havo3 {
+  position: relative;
+  top: -150px;
+  left: 0px;
 }
