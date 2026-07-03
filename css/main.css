@@ -488,40 +488,40 @@ h2, h3 {
 
 .experience-projects__note--work {
   position: absolute;      /* was relative */
-  width: 1170px;
-  top: 40px;                
-  left: 10px;
+  width: 600px;
+  top: 100px;                
+  left: 140px;
 }
 
 .experience-projects__note--projects {
   position: absolute;      /* was relative */
-  width: 1000px;
-  top: 80px;                
-  left: 580px;
+  width: 500px;
+  top: 150px;                
+  left: 800px;
 }
 
 .experience-projects__note--work .experience-projects__note-text {
   position: absolute;
-  top: 160px;      /* smaller number = higher up */
-  left: 390px;
+  top: 120px;      /* smaller number = higher up */
+  left: 200px;
   color: black;
 }
 
 .experience-projects__note--projects .experience-projects__note-text {
   position: absolute;
-  top: 150px;      /* bigger number = lower down, relative to its own note */
-  left: 300px;
+  top: 100px;      /* bigger number = lower down, relative to its own note */
+  left: 125px;
   color: black;
 }
 
 .experience-projects__note--work .experience-projects__note-text p {
   margin-bottom: 2.7rem;   /* increase this number for more space */
-  font-size: 1.6rem; 
+  font-size: 1.4rem; 
 }
 
 .experience-projects__note--projects .experience-projects__note-text li {
   margin-bottom: 1.5rem;
-  font-size: 1.6rem; 
+  font-size: 1.4rem; 
 }
 
 .experience-projects__note--work .experience-projects__note-text h3 {
