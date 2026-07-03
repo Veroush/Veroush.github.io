@@ -222,3 +222,95 @@
   top: -150px;
   left: 0px;
 }
+
+.about-school__visual--volunteer {
+  position: relative;
+  width: 400px;
+  height: 400px;      /* fixed height needed since children are absolute */
+  flex-shrink: 0;
+}
+
+.about-school__image--volunteer-back {
+  position: absolute;
+  top: -100px;
+  left: 30px;
+  width: 350px;
+  z-index: 1;
+}
+
+.about-school__image--volunteer-front {
+  position: absolute;
+  top: -150px;              /* more negative = sits higher than the back image */
+  left: 250px;
+  width: 350px;
+  transform: rotate(10deg); /* adjust rotation direction/amount */
+  z-index: 2;
+}
+
+.about-school__text--volunteer {
+  flex: none;         /* stop it from stretching to fill the row */
+  max-width: 550px;   /* boxes the text in — adjust this number to make it narrower/wider */
+  position: relative;
+  top: -150px;
+  left: 100px;
+}
+
+.about-school__arrow--4 {
+  position: relative;
+  top: -250px;
+  left: 200px;
+  width: 100px;   /* increase this number to make it bigger, decrease to make it smaller */
+  z-index: 2;
+  transform: rotate(50deg); /* adjust rotation direction/amount */
+}
+
+.about-school__visual--writing {
+  position: relative;
+  width: 400px;
+  height: 500px;
+  flex-shrink: 0;
+}
+
+.about-school__image--newspaper {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 380px;
+  z-index: 1;
+}
+
+.about-school__image--nanaaisa {
+  position: absolute;
+  top: 350px;
+  left: 40px;
+  width: 300px;
+  z-index: 2;
+}
+
+.about-school__text--writing {
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+.about-school__arrow--5 {
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+.about-school__arrow--6 {
+  position: relative;
+  top: 0px;      /* negative = up, positive = down */
+  left: 0px;     /* positive = right, negative = left */
+}
+
+.about-school__text--book {
+  flex: 1;
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
