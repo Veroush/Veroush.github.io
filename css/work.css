@@ -9,3 +9,52 @@
   background: #ffffff;
   padding: 5rem 2rem;
 }
+
+.work-topbar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.work-topbar__url {
+  width: 500px;                    /* size of the url bar — tune as needed */
+  transform: translateX(-80px);    /* nudges it left of dead center — increase to push further left */
+}
+
+.work-nav-row {
+  display: flex;
+  align-items: center;             /* keeps left cluster + right cluster on the same line/height */
+  justify-content: space-between;  /* hamburger+github on far left, icon cluster on far right */
+  padding: 0 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.work-nav-row__left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;                       /* space between hamburger.png and work-github.png */
+}
+
+.work-nav-row__right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;                    /* space between each icon in the right cluster */
+}
+
+.work-nav-row__icon {
+  height: 40px;                    /* shared height so everything in this row lines up — override per icon below if needed */
+  width: auto;
+}
+
+.work-subnav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;                       /* space between overview/repositories/projects/packages/stars */
+  padding: 0 2rem;
+  margin-bottom: 3rem;
+}
+
+.work-subnav__icon {
+  height: 30px;
+  width: auto;
+}
