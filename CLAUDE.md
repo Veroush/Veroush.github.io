@@ -44,7 +44,7 @@ project/
 ├── css/
 │   ├── main.css          # global styles — reset, fonts, nav, hero, about-strip, experience-projects, skills, footer. Footer background scoped via .footer--home modifier. no longer unchanged. Multiple new/modified rules prior session (full list in Section 8/9 below): .about-strip background + min-height, .experience-projects/.skills/.footer--home backgrounds, .about-strip__notebook img, .about-strip__photo, .about-strip__sticky-text, new .about-strip__intro-text + .about-strip__intro-text--top, new .about-strip__bio-text, new .about-strip__arrow, new .about-strip__roles wrapper, .roles-list__heading, .roles-list.
 │   ├── about.css         # row--5 (writing/book) fully repositioned; hobbies section styles present (.about-school__row--hobbies, .about-school__hobbies-title, .about-school__hobbies-cluster, and 11 individual .about-school__hobby-img--* classes). Unchanged this session — reviewed only, to extract image display widths for the resize plan. See Section 8 and Section 10.
-│   ├── work.css          # clean minimal file with just `.work-intro` placeholder. Unchanged.
+│   ├── work.css          # Full ruleset for .work-console, .work-console__bg, .work-console__screen, .work-topbar, .work-nav-row, .work-subnav, .work-visual-cluster, .project-cards + .project-card__* classes. Committed this session.
 │   └── contact.css       # contains dead CSS (.contact-card__fake-caret, .contact-card__mirror, @keyframes contact-caret-blink) since contact.js no longer exists. Not cleaned up. Reviewed this session (for image widths) but not edited.
 ├── fonts/
 │   ├── ModularAmplitude-mR6a.ttf       # removed from use — @font-face block deletion still unconfirmed in main.css
@@ -90,7 +90,7 @@ project/
 │   ├── homepage/, workpage/ — unchanged
 ├── index.html              # unchanged. KNOWN ISSUE: `.about-strip__sticky-wrap` and `.about-strip__notebook` still missing closing tags — low priority, carried over. no longer unchanged. Restructured .about-strip__right this session: sticky-note text replaced with nav links, added intro text block, bio text block, and arrow6 image as new elements. Closing-tag issue on .about-strip__sticky-wrap was fixed as part of this restructuring (bio-text/arrow moved outside it); .about-strip__notebook and .about-strip__right still missing explicit closing tags — carried over, still unresolved.
 ├── about.html              # unchanged this session (row--5 reorder + hobbies section from a prior session — still unconfirmed as committed, see Git Rules above)
-├── work.html                # unchanged
+├── work.html                Built out full GitHub-style console mockup: url-bar, hamburger+github row, 7-icon nav cluster (searchbar→flork2), 5-icon subnav (overview→stars), visual cluster (flork2.png + smiley-face.png), and 4 project cards (studie4su, taskflow, pixel-jumper-arcade-odyssey, chronicles_of_booksteria) with public-icon, title, description, and language dot+label each. Committed this session.
 └── contact.html             # unchanged
 ```
 
@@ -158,6 +158,12 @@ New .about-strip__roles wrapper div added around the heading + list so both can 
 - Work page shell (nav + footer + `.work-intro` placeholder) — no content built yet
 - Contact page structure (postcard, icon column, thank-you section) — working structurally; message textarea has no JS behavior (paused)
 
+### Work page (`work.html`) 
+- Console mockup shell (`.work-console` / `.work-console__bg` / `.work-console__screen`) built and positioned, using fixed-height-parent + position:absolute-child pattern (same as `.skills__console` on homepage) so resizing the console image doesn't push page content around
+- Url-bar, hamburger+github row, and 7-icon nav cluster (search→flork2) all built and positioned inside the console screen
+- Subnav row (overview→stars) built
+- Visual cluster (flork2 + smiley-face) built
+- 4 project cards built in a 2-column CSS grid with title/description/language-dot content, using HalfTermSchoolsOut font and GitHub-blue (#0969da) titles
 ---
 
 ## 9. BUGS & ERRORS WE FIXED (AND TECHNICAL DEBT FLAGGED)
@@ -198,6 +204,12 @@ Lesson: Same pattern as the row--5 lesson in Section 9 — always check the actu
 
 
 Non-bug/clarification: .experience-projects appearing "too far down" was actually caused by .about-strip's oversized min-height: 950px leaving dead white space, not by .experience-projects's own positioning — reducing .about-strip's min-height was the correct fix rather than pulling .experience-projects up with margin (which was making it disappear behind the leftover white space instead).
+
+Resizing an in-flow image pushes surrounding content up/down
+- **What happened**: resizing `.work-topbar__url` and later `.work-console__bg` caused everything below them (nav rows, project cards) to shift position.
+- **Cause**: both images were in normal document flow (no `position: absolute`), so their own height directly determined their parent's height, and everything after them reflowed.
+- **Fix**: gave the parent (`.work-topbar`, `.work-console`) a fixed height of its own, then set the image itself to `position: absolute` so it's sized/positioned independently without affecting layout around it.
+- **Lesson**: same root cause as the row--5 and about-strip sticky-wrap lessons already in this doc — always check whether an element is in normal flow before resizing it if things nearby are moving unexpectedly.
 
 ---
 
@@ -260,56 +272,18 @@ Non-bug/clarification: .experience-projects appearing "too far down" was actuall
 
 ---
 
+### Work page — ACTIVE AREA, in progress
+- [ ] **Cards 3 and 4 (taskflow, pixel-jumper-arcade-odyssey) are being clipped/hidden** by `overflow: hidden` on `.work-console__screen` — its fixed `height: 70%` isn't tall enough for all the stacked content. Explicitly deferred this session ("don't worry about it"), but must be fixed before submission. Two options discussed: let `.work-console__screen` grow with `height: auto` (risks spilling outside the console image's visible screen area), or increase both `.work-console` and `.work-console__screen` heights until everything fits (keeps the "inside the laptop" illusion, needs value tuning).
+- [ ] `.work-console__screen`'s `top/left/width/height` percentages are still placeholder values, not yet confirmed to align with the real visible screen area of `console.png`.
+- [ ] Public-icon, language-dot, and card positioning values are all first-pass placeholders, not confirmed final.
+- [ ] No descriptions/content decided yet for anything below the project cards (if anything more is planned for this page).
+
 ## 11. WHERE WE LEFT OFF
 
-- **Prior session's topic**: Veroushka asked how to fix slow page load caused by too many images in `img/`. This was a planning/advice conversation only — no files were opened, edited, or created except reviewing `about.css`, `main.css`, and `contact.css` (which Veroushka pasted in) to extract actual CSS display widths for a resize plan.
-- **What was covered, in order**:
-  1. General explanation of why images slow down page load and the main levers available (compression, resizing to display size, lazy loading, WebP format, removing unused files)
-  2. Explanation of how to use Squoosh (squoosh.app) — drag/drop, format selection, quality slider, resize field
-  3. Clarified that resizing the image file does NOT break the CSS layout — CSS `width` controls display size independently of the file's actual pixel dimensions
-  4. Went through `about.css` (and briefly `main.css`/`contact.css`) to build a full table of every image's actual CSS display width and doubled each for a retina-safe resize target (full table now in Section 10)
-  5. Clarified the resize workflow doesn't require manually setting the Height field — the aspect-ratio "chain link" toggle in Squoosh handles it automatically, as long as it's left linked
-  6. Veroushka decided to defer the entire image optimization pass to the end of the project rather than do it now
-- **Nothing was implemented or changed in any project file this session.**
-- **Very next step for next session**: 
-  1. Confirm/commit the still-outstanding row--5 and hobbies section work from the prior session — **do this first, before any further edits.**
-  2. Quick visual double-check of `.about-school__arrow--5` sizing (flagged as possibly contradictory to Veroushka's own "very small" description — carried over, still not resolved).
-  3. Confirm whether the current `margin-top: -150px` on `.about-school__row--hobbies` is Veroushka's final answer to "move this section up," since the CSS shows a value is already applied but it was never explicitly confirmed as final by her.
-  4. Continue fine-tuning hobbies image cluster (sizes, positions, rotations) per Veroushka's feedback.
-  5. Decide whether to center the hobbies cluster (`align-items: center`) instead of the current manual `margin-left` nudge.
-  6. Add the "Who I Am" + "Education" text block into `about.html` (wording finalized, see Section 12) and decide its placement relative to `.about-story`.
-  7. Skip "people I admire" unless Veroushka brings it up again.
-  8. Circle back to Contact page and Work page items once About page content is complete.
-  9. Image optimization pass (Section 10) stays parked until Veroushka signals she's ready for it — likely near final submission.
-- **Commits outstanding**: Row--5 reorder/repositioning AND the hobbies section are still not explicitly confirmed as committed by Veroushka, carried over from before this session. Suggested commit (unchanged, still valid if not yet run):
-
-Prior session's topic: Homepage refinement/restructuring — background colors, notebook/photo/tape/arrow sizing and positioning, sticky note content swap (bio text → nav links), new intro text, new bio text, new arrow image, roles list restyle and unified positioning wrapper.
-⚠️ Commits outstanding — NOT CONFIRMED: Veroushka was walked through suggested commit messages but never confirmed running git status or any commit/push for this session's changes. Next session must start with git status to check what (if anything) got committed. Suggested commit (if nothing has been run yet):
-
-bash  git add index.html css/main.css
-  git commit -m "style: refine about-strip section - white gradient backgrounds, resize notebook/photo/tape/arrow, add nav links and bio text to notebook, restyle roles list, fix section height"
-  git push
-
-Very next step for next session:
-
-Run git status first — confirm whether this session's homepage changes are committed.
-Finalize .about-strip min-height value (was mid-tuning between 950px and 700px).
-Finalize .about-strip__arrow (arrow6.png) size/position/rotation — was just added, not yet tuned.
-Finalize .about-strip__roles wrapper position (top/left) — restyled but not repositioned yet.
-All prior outstanding About-page items (Section 10) remain unchanged/untouched this session.
-
-
-
-Update to Git Rules reminder (top and bottom)
-Add:
-
-⚠️ NEW: The entire homepage restructuring session (backgrounds, notebook/photo/arrow sizing, sticky-note nav links, intro/bio text, roles list) has NOT been confirmed as committed. Run git status before any further edits.
-
-```bash
-git add about.html css/about.css
-git commit -m "feat: reorder writing/book row, add hobbies section with image cluster"
-git push
-```
+- **This session's topic**: Work page build, start to finish — console mockup shell, GitHub-style header (url-bar, hamburger, github icon, nav icon cluster, subnav), and 4 project cards with full content.
+- **CSS styling convention established this session**: matched the existing about.css pattern — plain `top`/`left` pixel values with inline comments explaining direction (e.g. `top: 40px; /* ↑ negative = up, positive = down */`), NOT `transform: translateX()/translateY()` for movement. `transform` is reserved only for `rotate()`, consistent with how about.css uses it. Centering (e.g. `.work-console__bg`) is done via `left: 50%` + a matching negative `margin-left` equal to half the element's width, rather than `transform: translateX(-50%)` — note this means the margin-left value must be manually recalculated any time the element's width changes.
+- **Very next step for next session**: fix the card-clipping issue (Section 10), then retune `.work-console__screen` alignment against the real console.png.
+- **Commits this session**: work.html + work.css committed with message "feat: build work page - console mockup with GitHub header, nav icons, and project cards" — confirmed pushed.
 
 ---
 

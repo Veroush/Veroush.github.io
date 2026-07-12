@@ -12,20 +12,19 @@
 
 .work-console {
   position: relative;
-  width: 95%;
-  max-width: 1400px;
-  height: 750px;
+  width: 100%;
+  height: 800px;
   margin: -200px auto 3rem;
-  overflow: hidden;
+  overflow: visible;      /* was: hidden — nothing clips at the console edge anymore */
 }
 
 .work-console__bg {
   position: absolute;
   object-fit: fill;
-  width: 1250px;      /* size — bigger/smaller number for wider/narrower */
-  height: 700px;       /* size — bigger/smaller number for taller/shorter */
-  top: 20px;           /* ↑ negative = up, positive = down */
-  left: 50px;            /* ↔ negative = left, positive = right, relative to centered position below */
+  width: 1400px;
+  height: 800px;
+  top: 20px;
+  left: 40px;
 }
 
 .work-console__screen {
@@ -33,16 +32,12 @@
   top: 12%;
   left: 10%;
   width: 80%;
-  height: 70%;        /* ← this is a fixed height, always the same regardless of what's inside */
-  overflow: hidden;    /* ← this clips anything that doesn't fit inside that height */
+  /* height + overflow removed entirely — this is now just a positioning anchor, not a bounding box */
 }
 
 .work-topbar {
-  position: relative;      /*  — needed so the absolute child positions relative to this */
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  height: 80px;             /* — gives .work-topbar a fixed height of its own, independent of the image inside it */
+  position: relative;
+  height: 80px;
 }
 
 .work-topbar__url {
@@ -50,81 +45,92 @@
   object-fit: fill;
   width: 500px;
   height: 120px;
-  top: 40px;      /* ↑ negative = up, positive = down */
-  left: 50%;       /* keeps it centered in .work-topbar */
-  margin-left: -280px;  /* half of width, negated, plus your -30px left nudge folded in */
+  top: 40px;
+  left: 50%;
+  margin-left: -280px;
 }
 
+/* nav row icons — each now independently positioned instead of flex-aligned */
 .work-nav-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
-  margin-bottom: 1rem;
-}
-
-.work-nav-row__left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.work-nav-row__right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  position: relative;
+  height: 60px;             /* just a spacer/anchor, doesn't constrain children anymore */
 }
 
 .work-nav-row__icon {
-  height: 28px;             /* smaller now since it's living inside the console screen */
+  position: absolute;
+  height: 28px;
   width: auto;
 }
 
+.work-nav-row__hamburger { top: 0; left: 0; }
+.work-nav-row__github    { top: 0; left: 40px; }
+.work-nav-row__searchbar { top: 0; left: 300px; }
+.work-nav-row__copilot   { top: 0; left: 400px; }
+.work-nav-row__create    { top: 0; left: 450px; }
+.work-nav-row__issues    { top: 0; left: 500px; }
+.work-nav-row__pulls     { top: 0; left: 550px; }
+.work-nav-row__notifications { top: 0; left: 600px; }
+.work-nav-row__flork     { top: -10px; left: 650px; }
+
+/* subnav icons — same treatment */
 .work-subnav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 0 1rem;
+  position: relative;
+  height: 40px;
 }
 
 .work-subnav__icon {
+  position: absolute;
   height: 22px;
   width: auto;
 }
+/* give each of these 5 its own class the same way if you want to move them independently — 
+   right now they'd all stack at 0,0. Let me know if you want me to add those classes to the HTML too. */
 
 .work-visual-cluster {
   position: relative;
-  display: inline-block;
-  margin-bottom: 1.5rem;
+  height: 150px;
 }
 
 .work-visual-cluster__flork {
-  width: 120px;              /* tune size as needed */
+  position: absolute;
+  top: 70px;         /* ↑ negative = up, positive = down */
+  left: 0;          /* ↔ negative = left, positive = right */
+  width: 300px;      /* bigger number = bigger image — try increasing from 120px */
   height: auto;
-  display: block;
 }
 
 .work-visual-cluster__smiley {
   position: absolute;
-  top: 10px;                 /* tune position on top of flork2.png */
+  top: 10px;
   left: 20px;
   width: 40px;
   height: auto;
 }
 
+/* project cards — no more grid, each card is its own free-floating block */
 .project-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;   /* 2 columns = 2 rows of 2 for your 4 cards */
-  gap: 1.5rem;
+  position: absolute;   /* was: relative — now it can be moved as a whole */
+  top: 230px;               /* ↑ negative = up, positive = down — moves ALL 4 cards together */
+  left: 320px;              /* ↔ negative = left, positive = right — moves ALL 4 cards together */
+  height: 600px;
 }
 
 .project-card {
-  position: relative;
+  position: absolute;
+  width: 400px;
 }
 
+.project-card--1 { top: 0px;   left: 0px; }
+.project-card--2 { top: 0px;   left: 400px; }
+.project-card--3 { top: 150px; left: 0px; }
+.project-card--4 { top: 150px; left: 400px; }
+
 .project-card__bg {
-  width: 100%;
-  height: auto;
+  position: absolute;
+  width: 500px;
+  height: 160px;
+  top: 0;
+  left: 0;
   display: block;
 }
 
@@ -139,50 +145,37 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 20px;
+  width: 80px;
   height: auto;
 }
 
-.project-card__public-text {
-  position: absolute;
-  top: 1rem;
-  right: 2.5rem;             /* sits just left of the public icon */
-  font-family: 'HalfTermSchoolsOut', sans-serif;
-  font-size: 0.9rem;
-  color: #333;
-}
-
-.project-card__title {
-  color: #0969da;             /* GitHub's link blue */
-  font-family: 'HalfTermSchoolsOut', sans-serif;
-  font-size: 1.3rem;
-  margin-bottom: 0.75rem;
-  margin-top: 1.5rem;         /* pushes it below the public icon row */
-}
-
-.project-card__desc {
-  font-family: 'HalfTermSchoolsOut', sans-serif;
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #333;
-  margin-bottom: 1rem;
-}
-
 .project-card__lang {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  position: absolute;
-  bottom: 1.5rem;
+  position: relative;   /* just an anchor now, not a flex layout */
+  bottom: -2rem;
   left: 1.5rem;
 }
 
 .project-card__lang-dot {
-  width: 12px;
+  position: absolute;
+  top: 0;              /* ↑ negative = up, positive = down */
+  left: 0;               /* ↔ negative = left, positive = right */
+  width: 12px;           /* bigger/smaller number = bigger/smaller circle */
   height: 12px;
 }
 
 .project-card__lang-text {
+  position: absolute;
+  top: 0;
+  left: 20px;             /* keep this fixed so removing flex's auto-gap doesn't collide the text into the dot */
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 1rem;
+  color: #333;
+}
+
+.project-card__public-text {
+  position: absolute;
+  top: 1.9rem;        /* ↑ negative = up, positive = down */
+  right: 2.5rem;      /* smaller = right, bigger = left (since it's anchored via "right") */
   font-family: 'HalfTermSchoolsOut', sans-serif;
   font-size: 0.9rem;
   color: #333;
