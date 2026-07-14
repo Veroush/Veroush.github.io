@@ -33,7 +33,7 @@
   position: absolute;
   object-fit: fill;
   width: 1400px;
-  height: 850px;
+  height: 830px;
   top: 20px;
   left: 40px;
 }
@@ -73,6 +73,17 @@
   z-index: 2
 }
 
+.work-topbar__url-link {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+.work-topbar__url-link:hover {
+  text-decoration: underline;
+}
+
 .work-nav-cluster {
   position: relative;
   top: -80px;      /* ↑ negative = up, positive = down — moves nav row + both dividers + subnav together */
@@ -95,7 +106,7 @@
 .work-nav-row__github        { top: -10px;     left: 35px;  height: 60px; width: 60px; }
 .work-nav-row__searchbar     { top: -20px; left: 230px; height: 80px; width: 200px; max-width: none; }
 .work-nav-row__copilot       { top: -5px;     left: 411px; height: 48px; width: 70px; max-width: none; }
-.work-nav-row__create        { top: -9px;     left: 464px; height: 54px; width: 72px; }
+.work-nav-row__create        { top: -9px;     left: 462px; height: 54px; width: 75px; }
 .work-nav-row__issues        { top: -5px;     left: 517px; height: 48px; width: 48px; }
 .work-nav-row__pulls         { top: -4px;     left: 553px; height: 45px; width: 48px; }
 .work-nav-row__notifications { top: -6px;     left: 588px; height: 47px; width: 48px; }
@@ -171,7 +182,7 @@
 .work-nav-row__divider {
   position: absolute;
   top: 3px;
-  left: 490px;
+  left: 487px;
   width: 2px;
   height: 30px;
   background: #6b7685;   /* lighter than #4a5568, keeps the same slate-blue hue */
@@ -179,7 +190,7 @@
 
 .work-visual-cluster {
   position: relative;
-  top: 50px;      /* moves flork2 + smiley together */
+  top: 250px;      /* moves flork2 + smiley together */
   left: 0px;
   height: 150px;
 }
@@ -225,17 +236,23 @@
 
 .work-visual-cluster__name {
   position: absolute;
-  top: 340px;              /* ↑ below the smiley badge (badge sits at top: 275px, ~40px tall) */
-  left: 100px;              /* ↔ roughly centered under flork */
+  top: 370px;              /* ↑ below the smiley badge (badge sits at top: 275px, ~40px tall) */
+  left: 40px;              /* ↔ roughly centered under flork */
   font-family: 'HalfTermSchoolsOut', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   color: #333;
+}
+
+.work-lower-cluster {
+  position: relative;
+  top: -210px;      
+  left: 0px;
 }
 
 .project-cards__heading {
   position: absolute;
-  top: 280px;             /* ↑ just above .project-cards' own top: 320px */
-  left: 320px;             /* ↔ matches .project-cards' left, so it lines up with the cards */
+  top: 300px;             /* ↑ just above .project-cards' own top: 320px */
+  left: 335px;             /* ↔ matches .project-cards' left, so it lines up with the cards */
   font-family: 'ShinyPaint', sans-serif;
   font-size: 1.5rem;
   color: #333;
@@ -252,6 +269,24 @@
 .project-card {
   position: absolute;
   width: 400px;
+}
+
+.project-card__title {
+  color: #0969da;
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.project-card__title-link {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+.project-card__title-link:hover {
+  text-decoration: underline;
 }
 
 .project-card--1 { top: 0px;   left: 0px; }
@@ -272,6 +307,11 @@
   position: absolute;
   inset: 0;
   padding: 1.5rem;
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+}
+
+.project-card__desc {
+  margin-top: 0.5rem;   
   font-family: 'HalfTermSchoolsOut', sans-serif;
 }
 
@@ -329,7 +369,7 @@
   position: absolute;
   top: 200px;
   left: 0px;
-  width: 1000px;
+  width: 1150px;
   height: 2px;
   background: #6b7685;   /* lighter than #4a5568, keeps the same slate-blue hue */
 }
