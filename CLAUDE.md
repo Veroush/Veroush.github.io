@@ -970,3 +970,156 @@ Unchanged this session.
 - Suggest commit messages using `feat:`, `fix:`, `style:`, `refactor:`, `chore:` prefixes
 - **Do not wait to be asked — remind proactively every time**
 - **✅ This session's work was confirmed committed and pushed before ending**
+
+# Session Handoff Document — Veroushka Ramjiawan Portfolio (Contact Page Session)
+
+---
+
+## ⚠️ GIT RULES — READ THIS FIRST
+
+- After EVERY task, no matter how small, remind Veroushka to stage, commit, and push
+- Always suggest a commit message in this format:
+  - `feat:` new feature or section added
+  - `fix:` bug or broken thing corrected
+  - `style:` CSS or visual changes only
+  - `refactor:` restructuring code without changing behavior
+  - `chore:` moving files, renaming, cleanup
+- For any significant feature, suggest creating a branch first
+- **Veroushka tends to forget git entirely — remind proactively, do not wait to be asked**
+- **⚠️ Confirm `git status` at the start of the next session before making any further edits, to make sure this session's work was fully committed and pushed.**
+
+---
+
+## 1. PROJECT OVERVIEW
+
+- Unchanged — see prior handoffs for full details.
+- This session focused entirely on **`contact.html` / `contact.css` / `contact.js`** — the contact page was previously PAUSED; this session un-paused and substantially completed it.
+
+---
+
+## 2. FOLDER & FILE STRUCTURE (files touched this session)
+project/
+├── css/
+│   └── contact.css   # duplicate rule removed, rotation fix, textarea width fix, icon+label layout,
+│                      # submit-arrow + sent-confirmation styling — see Section 8
+├── js/
+│   └── contact.js     # was EMPTY at start of session — now contains fake-caret logic, submit-arrow
+│                       # visibility logic, and Formspree submission handler — see Section 8
+└── contact.html        # icons restructured into icon+label rows, submit-arrow markup added,
+                  # sent-confirmation markup added — see Section 8
+
+---
+
+## 3–7. ROUTES / DATABASE / CONTROLLERS / MIDDLEWARE / AUTH
+
+Not applicable — static HTML/CSS/JS only, no backend. Contact form now submits to **Formspree** (third-party form backend service, free tier, 50 submissions/month) rather than a self-hosted backend — see Section 8.
+
+---
+
+## 8. FEATURES ADDED/CHANGED THIS SESSION
+
+### Confirmed: `contact.js` was empty (not deleted) at session start
+Resolves the "file-deletion-vs-empty" open item from prior handoffs. File exists, was empty, is now fully populated.
+
+### Fake caret — built and working
+- `.contact-card__fake-caret` + `@keyframes contact-caret-blink` CSS was NOT dead weight as previously assumed — HTML already had the caret span wired up, just waiting on JS.
+- `contact.js` now toggles `.is-visible` on the fake caret + toggles the textarea's real `caret-color`: fake caret shows on focus while the box is empty, real caret takes over once typing starts, fake caret returns if the box is cleared, hides entirely on blur.
+
+### Postcard rotation mismatch — fixed
+- `.contact-card__bg` and `.contact-card__form` previously had mismatched `transform: rotate()` values (`-1deg` vs `0.7deg`) despite comments saying they should match.
+- Unified to `-1deg` initially, later adjusted further to `-2deg` per Veroushka's request (dotted lines/labels needed to lean slightly more left) — **final value not yet re-confirmed, check current live CSS**.
+
+### Duplicate `.contact-card` CSS rule — removed
+- Two conflicting `.contact-card` blocks existed back to back (`width: 700px` vs `width: 750px`); the dead first block was removed.
+
+### Message textarea width bug — fixed
+- Textarea wasn't stretching to match the postcard's text width (was using intrinsic `cols`-based width, not filling parent).
+- Fixed via `width: 100%; box-sizing: border-box;` on `.contact-card__field--message textarea`.
+
+### Contact icons — restructured with labels
+- Icons converted from plain `<img>`+link into `.contact-icons__item` rows (icon + `.contact-icons__label` span), each wrapped in the existing mailto/tel/LinkedIn/GitHub `<a>` tags — so icon + label are both clickable as one unit, no separate JS needed.
+- Labels added: full email, formatted phone number, LinkedIn profile-slug alias (visually shortened, full URL still used in `href`), full GitHub URL.
+- `.contact-icons` layout changed from `align-items: center` to `flex-start` to support label rows.
+- `.contact-form-section` changed from `justify-content: center` to `space-between` (later constrained via `max-width: 1100px; margin: 0 auto;`) so icons sit left, postcard sits right, per Veroushka's request.
+- Each icon now has its own explicit width/height rule (`--mail`, `--phone`, `--linkedin`, `--github`) so any one can be resized independently — mail icon sized down to `45px` (others stayed `60px`).
+- Each icon *row* (`.contact-icons__item--mail/--phone/--linkedin/--github`) now has its own `position: relative; left: 0px;` so any row can be nudged left/right independently of the others without affecting spacing (vertical `gap` in `.contact-icons` still controls row spacing).
+
+### Submit arrow — built
+- New `.contact-card__submit` block (label + `green-arrow.png` button) added inside `.contact-card`, absolutely positioned (`top: 15%; right: 6%` — inside the postcard, not beside it).
+- Hidden by default (`opacity: 0; pointer-events: none;`), fades in via `.is-visible` class once the message textarea has non-whitespace content (`contact.js` `input` listener).
+- Label text ("Click on the arrow when you're done typing") rotated slightly right via `transform: rotate(3deg)` on `.contact-card__submit-label`.
+
+### Sent confirmation — built
+- New `.contact-card__sent` block (sibling of `.contact-card`, inside `.contact-form-section`) holding a dynamic thank-you text (`#sent-text`) + `message-sent-envelope.png`.
+- Real image dimensions confirmed via file inspection: `message-sent-envelope.png` is **1448×1086px** (~4:3 ratio). CSS uses `aspect-ratio: 1448 / 1086` with an explicit `width` so it never distorts — **current width value not confirmed final, check live CSS** (was being tuned down from a placeholder `1000px`/`500px` distorted box to something more reasonable, e.g. `550px`).
+- Confirmed image dimensions for the postcard background too: `contact-card.png` is **1592×988px** (~1.61:1) — noted for reference if `.contact-card`'s width/aspect-ratio is revisited later.
+- On arrow click: `.contact-card` is hidden (`display: none`), `.contact-card__sent` is shown (`.is-visible`), and the thank-you text is dynamically set to `Thank you for your message, {name}!` using the "From" field's value (falls back to "friend" if left blank).
+- Thank-you text repositioned from normal flow to `position: absolute` so it layers ON TOP of the envelope image (rather than sitting above it) — `top` value is the tuning knob for vertical placement, **not yet confirmed final, check live CSS**.
+
+### Real email delivery — Formspree integration added
+- Contact page now actually sends messages to Veroushka's inbox via **Formspree** (free tier, https://formspree.io) — confirmed working by Veroushka.
+- `contact.js` submit handler does a `fetch()` POST to the Formspree endpoint with the form's `FormData` (uses existing `name="from"` and `name="message"` attributes already on the inputs — no HTML field renaming needed).
+- On success: triggers the sent-confirmation swap (see above). On failure/network error: shows a browser `alert()` asking the visitor to try again or email directly — deliberately does NOT show the "sent" envelope on failure.
+- **Note**: form does not currently collect the visitor's own email address (only their name) — so Veroushka cannot hit "reply" in her inbox to respond directly; she'd need to manually look up how to contact them back. Confirmed intentional/acceptable by Veroushka for now — flagged in case it becomes a problem later.
+- Optional `_subject` hidden field (for easier inbox filtering) was offered but not added — not a blocker, could revisit.
+
+---
+
+## 9. BUGS & ERRORS WE FIXED (this session)
+
+### Postcard `<span>`/dotted-line rotation didn't match the postcard graphic
+See Section 8 — mismatched `rotate()` values on `.contact-card__bg` vs `.contact-card__form`, despite comments instructing them to match. Fixed by unifying the values.
+
+### Message textarea stopped short of the postcard's text width
+See Section 8 — textarea defaulted to intrinsic `cols`-based sizing instead of stretching with its flex parent. Fixed via explicit `width: 100%` + `box-sizing: border-box`.
+
+### Sent-confirmation image was set to a distorted fixed box (`1000px` × `500px`)
+- **Cause**: manually guessed width/height values didn't match the real image's aspect ratio (1448×1086, ~4:3), so the image was being visibly squashed.
+- **Fix**: switched to `aspect-ratio` CSS property + a single `width` value, so height always auto-calculates correctly — only one number needs tuning instead of two staying in sync.
+- **Lesson**: same "two dimensions need to match a real image's ratio" bug pattern as elsewhere in the project (see `.contact-card` dimension check earlier this session) — worth checking actual pixel dimensions via file inspection before hardcoding both width and height on any image.
+
+---
+
+## 10. WHAT STILL NEEDS TO BE DONE — UPDATED
+
+### Resolved this session (remove from old "Contact page — PAUSED" list):
+- [x] `contact.js` file-deletion-vs-empty confirmation — confirmed empty, not deleted, now populated
+- [x] Orphaned CSS cleanup — `.contact-card__fake-caret` / `@keyframes contact-caret-blink` were NOT orphaned, now actively used; `.contact-card__mirror` still unconfirmed/unused, check if still present in CSS and remove if truly unused
+- [x] Postcard rotation mismatch — fixed
+- [x] Submit functionality — built (arrow → envelope swap + real Formspree email delivery)
+- [x] Message textarea rebuild — fake caret + real caret handoff logic built
+
+### Still open / new from this session:
+- [ ] Final rotation value on `.contact-card__form` (last set to `-2deg`) — not explicitly re-confirmed as final after the last nudge
+- [ ] Final width value on `.contact-card__sent-img` (aspect-ratio locked, but exact width not confirmed — was being brought down from a placeholder `1000px`)
+- [ ] Final `top` value on `.contact-card__sent-text` (vertical position over the envelope) — not confirmed final
+- [ ] Icon file verification — original open item, not specifically re-checked this session (icons display correctly per screenshots shared, but no explicit "all files confirmed correct" statement from Veroushka this session)
+- [ ] Consider adding a visitor-email field to the form (so Veroushka can reply directly) — discussed, explicitly deferred/declined for now, not a blocker
+- [ ] Consider adding a hidden `_subject` field for inbox filtering — offered, not added, not a blocker
+- [ ] Consider a loading/"Sending..." state on the arrow button while the Formspree fetch is in progress — offered, not yet built
+- [ ] All prior outstanding items from earlier handoffs (about page, work page, performance pass, mobile nav) — **still open, unchanged, not touched this session**
+
+---
+
+## 11. WHERE WE LEFT OFF
+
+- **This session's topic**: Un-paused and substantially completed the contact page — fake caret behavior, postcard rotation fix, icon+label restructuring with independent positioning, submit-arrow-to-envelope flow, and real email delivery via Formspree.
+- **Completed**: all of the above, confirmed working end-to-end by Veroushka (test message successfully arrived in inbox).
+- **Not completed**: a handful of final visual tuning values (rotation degree, sent-image width, sent-text vertical position) — functional but not pixel-locked as "final."
+- **Very next step**: confirm `git status`, commit, then either continue fine-tuning the contact page's remaining placeholder values, or move to another page's outstanding items (about page min-height, work page lang-dot positioning, etc.)
+- **Commits this session**: [PENDING — commit was suggested (`feat: add fake caret toggle, submit arrow with sent confirmation, and Formspree email integration to contact form`) but not yet confirmed pushed by Veroushka as of this handoff being written — confirm at start of next session]
+
+---
+
+## 12–13. PERSONAL DETAILS / SIDE TOPICS
+
+Unchanged this session.
+
+---
+
+## ⚠️ GIT RULES — REMINDER AT THE BOTTOM
+
+- After EVERY task, remind Veroushka to stage, commit, and push
+- Suggest commit messages using `feat:`, `fix:`, `style:`, `refactor:`, `chore:` prefixes
+- **Do not wait to be asked — remind proactively every time**
+- **⚠️ Confirm this session's commit was actually pushed at the start of next session — not yet reconfirmed via `git status` as of this handoff**
