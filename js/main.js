@@ -2,6 +2,14 @@
    main.js
    ============================================================ */
 
+/* --- "Come back!" tab title trick --- */
+const originalTitle = document.title;
+const awayTitle = "No wait! Come back! 🥺";
+
+document.addEventListener('visibilitychange', () => {
+  document.title = document.hidden ? awayTitle : originalTitle;
+});
+
 /* --- Mobile nav toggle --- */
 const burger = document.querySelector('.nav__burger');
 const navLinks = document.querySelector('.nav__links');
