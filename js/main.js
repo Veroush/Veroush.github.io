@@ -4,7 +4,7 @@
 
 /* --- "Come back!" tab title trick --- */
 const originalTitle = document.title;
-const awayTitle = "No wait! Come back! 🥺";
+const awayTitle = "No wait! Come back!";
 
 document.addEventListener('visibilitychange', () => {
   document.title = document.hidden ? awayTitle : originalTitle;
