@@ -343,8 +343,16 @@
   margin-top: -50px;
 }
 
+.contact-typewriter__intro {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  top: 70px;   /* bump this to move flork + text + arrow down together */
+}
+
 .contact-typewriter__flork {
-  width: 100px;
+  width: 50px;
   height: auto;
 }
 
@@ -358,6 +366,7 @@
 .contact-typewriter__arrow {
   width: 60px;
   height: auto;
+  transform: rotate(185deg);
 }
 
 .contact-typewriter__img {
