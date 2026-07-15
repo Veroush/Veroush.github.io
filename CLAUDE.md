@@ -1123,3 +1123,195 @@ Unchanged this session.
 - Suggest commit messages using `feat:`, `fix:`, `style:`, `refactor:`, `chore:` prefixes
 - **Do not wait to be asked — remind proactively every time**
 - **⚠️ Confirm this session's commit was actually pushed at the start of next session — not yet reconfirmed via `git status` as of this handoff**
+
+## 2. FOLDER & FILE STRUCTURE (files touched this session)
+project/
+├── css/
+│   └── contact.css   # new .contact-typewriter block + bop/shuffle keyframes — see Section 8
+├── js/
+│   └── contact.js     # new typewriter play/pause/shuffle logic — see Section 8
+└── contact.html        # new .contact-typewriter markup (flork-music, caption, arrow6, typewriter, audio)
+
+New image/audio assets referenced (confirm these exist at these paths):
+- `img/contactpage/typewriter.png`
+- `img/contactpage/flork-music.webp`
+- `img/aboutpage/arrow6.png` (reused from about page)
+- `img/contactpage/The Typewriter by Leroy Anderson.mp3` (referenced in HTML with `%20` URL-encoded spaces)
+
+All other files unchanged this session.
+
+---
+
+## 8. FEATURES ADDED/CHANGED THIS SESSION
+
+### New `.contact-typewriter` section — click-to-play audio
+- Placed at the bottom-right of the contact page, above the footer
+- Row layout (left to right): `flork-music.webp` → caption text ("Please listen to the famous Typewriter Song!") → rotated `arrow6.png` → `typewriter.png` (clickable) → hidden `<audio>` element
+- flork-music, caption, and arrow are grouped inside a new `.contact-typewriter__intro` wrapper so they can be moved together as one unit via a single `top` value, independent of the typewriter image itself
+- Typewriter image uses `position: relative; top: 70px; z-index: 2;` to visually sit lower than its box without affecting footer layout (z-index needed because the offset overlaps the footer's stacking area)
+
+### Click behavior (`contact.js`)
+- Click while paused → plays
+- Click while playing → pauses AND resets to `currentTime = 0` (so next click restarts from the beginning)
+- Tab switch / window blur (e.g. clicking OS volume control) → pauses **without** resetting position, via `visibilitychange` and `window blur` listeners — clicking the image again resumes from where it left off (this behavior was specifically requested and differs from the explicit-pause-click reset behavior above)
+
+### Animations synced to actual audio playback
+- Hooked to the `<audio>` element's native `play`/`pause` events (not the click handler directly) — this keeps animations correctly in sync even when tab-blur pauses the audio without a click
+- `flork-music.webp` → `.is-bopping` class → `typewriter-bop` keyframe (scale + vertical bounce, `0.5s` loop)
+- `typewriter.png` → `.is-shuffling` class → `typewriter-shuffle` keyframe (up → down → left → right → center sequence, `1.2s` loop)
+
+### Sizing/positioning — first pass, not confirmed final
+- `flork-music.webp` width tuned down to `70px` (from initial `100px`) per Veroushka's request
+- Arrow rotation added (`transform: rotate(20deg)`, direction/degree not yet confirmed final)
+- `.contact-typewriter` bottom padding and `margin-top` adjusted a few times while chasing footer spacing — current values: `padding: 1rem 4rem 70px; margin-top: -50px;`
+
+---
+
+## 9. BUGS & ERRORS WE FIXED (this session)
+
+### Typewriter image not clickable after being moved down
+- **Cause**: `position: relative; top: 70px;` visually shifted the image without reserving space for it, so it overlapped the `<footer>` (which renders after it in the HTML and sits on top in stacking order), intercepting clicks.
+- **Fix**: added `z-index: 2` to `.contact-typewriter__img` so it stays clickable even while visually overlapping the footer.
+- **Lesson**: same "relative positioning doesn't reserve space" pattern as elsewhere in this project (see work-page absolute-positioning notes) — when an offset element overlaps a later sibling, add `z-index` or reserve space with padding, not both by accident.
+
+### Animation getting out of sync when audio was paused via tab-switch (not click)
+- **Cause (avoided)**: originally considered toggling the bop/shuffle classes only inside the click handler, which would have left the animation running if the audio was paused via tab-blur instead of a click.
+- **Fix**: hooked animation toggling to the audio element's native `play`/`pause` events instead, so any pause — click-triggered or blur-triggered — reliably stops the animation.
+
+---
+
+## 10. WHAT STILL NEEDS TO BE DONE — UPDATED
+
+### Contact page — carried over from last session, STILL NOT FIXED (reviewed this session, explicitly deferred):
+- [ ] **Postcard rotation mismatch is back.** `.contact-card__bg` is `rotate(-1deg)`, `.contact-card__form` is `rotate(1deg)` — these do NOT match despite a comment claiming they do. Was previously fixed and unified in an earlier session; has drifted since. Needs re-fixing.
+- [ ] **Sent-confirmation envelope image is stretched again.** `.contact-card__sent-img` currently has fixed `width: 800px; height: 450px;` instead of the `aspect-ratio`-based fix from a previous session (image is 1448×1086px, ~4:3 — the current fixed box is a mismatched ratio and will visibly squash it). Needs the `aspect-ratio` approach restored.
+- [ ] Duplicate `.contact-card__sent-text` rule still present in CSS (declared twice — not breaking anything currently, but worth merging into one rule during a cleanup pass)
+
+### New from this session — typewriter feature, first pass:
+- [ ] Confirm final `top` value for `.contact-typewriter__intro` (flork + text + arrow group) — not yet tuned
+- [ ] Confirm arrow6 rotation direction/degree (`rotate(20deg)`) — not yet confirmed as final
+- [ ] Confirm final spacing values on `.contact-typewriter` (`padding-bottom: 70px`, `margin-top: -50px`, typewriter image `top: 70px`) — all first-pass, chased by feel
+- [ ] Confirm bop/shuffle animation speed and intensity feel right (currently `0.5s`/`1.2s`, `8px`/`6px` offsets) — not yet confirmed final
+- [ ] Verify `flork-music.webp` file path is correct (assumed to be in `img/contactpage/` alongside `typewriter.png` — not explicitly confirmed by Veroushka)
+
+### Non-code item discussed, no action needed in repo:
+- Mailto link (`ramjiawanveroushka95@gmail.com`) opening a blank Chrome tab instead of a mail client — **this is an OS/browser default-app setting on the visitor's machine, not a bug in the site's code.** `mailto:` href is correct as written. Flagged as "fix later" but there's nothing to change in the codebase — carried over only as a reminder in case Veroushka wants to revisit troubleshooting her own machine's settings.
+
+### All prior outstanding items from earlier handoffs
+(work page positioning, about page hobbies/min-height, "Who I Am"/Education sections, performance pass, mobile nav) — **still open, unchanged, not touched this session.**
+
+---
+
+## 11. WHERE WE LEFT OFF
+
+- **This session's topic**: Built a new click-to-play typewriter audio feature on the contact page (flork-music + caption + arrow6 + typewriter image + audio), with distinct play/pause/restart click behavior, tab-blur pause-without-reset behavior, and playback-synced bop/shuffle animations on flork and the typewriter image respectively.
+- **Also reviewed but explicitly NOT fixed this session**: postcard rotation mismatch (drifted back to mismatched values) and the sent-confirmation envelope image being stretched again (lost its `aspect-ratio` fix) — both flagged, both deferred by Veroushka to "later."
+- **Completed**: full typewriter feature — markup, styling, click/tab-blur logic, synced animations, z-index click-through fix.
+- **Not completed**: final position/spacing/animation-feel tuning (all first-pass); the two carried-over rotation/stretch bugs remain unfixed.
+- **Very next step**: confirm `git status`, commit the typewriter feature, then either fine-tune the typewriter's positioning/animation values, or circle back to fix the rotation mismatch and envelope stretch bugs.
+- **Commits this session**: not yet confirmed — remind Veroushka to check `git status` and commit/push before ending the session.
+
+---
+
+## 12–13. PERSONAL DETAILS / SIDE TOPICS
+
+Unchanged this session.
+
+---
+
+## ⚠️ GIT RULES — REMINDER AT THE BOTTOM
+
+- After EVERY task, remind Veroushka to stage, commit, and push
+- Suggest commit messages using `feat:`, `fix:`, `style:`, `refactor:`, `chore:` prefixes
+- **Do not wait to be asked — remind proactively every time**
+- **⚠️ This session's work is not yet confirmed committed — confirm `git status` before starting the next session**
+
+```bash
+git add contact.html css/contact.css js/contact.js
+git commit -m "feat: add clickable typewriter audio feature with flork-music, caption, arrow, and bop/shuffle animations"
+git push
+```
+
+## ⚠️ GIT RULES — READ THIS FIRST
+
+- After EVERY task, no matter how small, remind Veroushka to stage, commit, and push
+- Always suggest a commit message in this format:
+  - `feat:` / `fix:` / `style:` / `refactor:` / `chore:`
+- **Veroushka tends to forget git entirely — remind proactively, do not wait to be asked**
+- **⚠️ Confirm `git status` at the start of the next session — this session's `contact.js` edits are NOT yet confirmed committed.**
+
+---
+
+## 1. PROJECT OVERVIEW
+
+Unchanged — see prior handoffs.
+
+**Note on this session**: Veroushka opened the session saying she wanted to work on the **homepage** (`index.html`/`main.css`) and shared those files for context. However, the session ended up entirely spent debugging the **contact page typewriter's beat-detection logic** (`js/contact.js`) instead. **Homepage work was not actually started this session** — no homepage changes were made.
+
+---
+
+## 2. FILES TOUCHED THIS SESSION
+project/
+└── js/
+└── contact.js   # beat-detection bug fixes — see Section 8/9
+
+`index.html`, `main.css`, `main.js` — shared for context, but **not edited** this session.
+
+---
+
+## 8–9. BUGS FIXED THIS SESSION (all in `contact.js`, `detectBeat()`/typewriter block)
+
+### Stray closing brace broke the entire file
+- The `if (typewriterImg && typewriterAudio) {` guard's opening line had been deleted at some point, but its matching closing `}` was still sitting before the final `});` — this throws `Uncaught SyntaxError` on page load, breaking not just the typewriter but the fake caret and Formspree submission too (same file).
+- **Fix**: re-added the `if (typewriterImg && typewriterAudio) {` line right after `florkImg` is queried.
+- **Not fully confirmed**: whether `setupAudioAnalyser`, `detectBeat`, and `onBeat` end up correctly inside vs. outside that guard — was mid-checking indentation with Veroushka when the conversation moved on. **Re-verify this first, next session.**
+
+### Beat detection stopped firing after the song's intro
+- **Cause 1**: `avgEnergy` was calculated *after* pushing the current sample into `energyHistory`, so every frame was being compared against an average that included itself — dampening how "spiky" anything could look.
+- **Cause 2**: threshold (`1.15`) was tuned for a punchier track than this song actually is (smooth/sustained energy, no big percussive spikes).
+- **Fix applied**: 
+  - calculate `avgEnergy` from history *before* pushing the new sample
+  - lowered multiplier `1.15` → `1.08`
+  - shortened rolling window `? → 8` frames
+  - added a noise floor (`energy > 50`)
+  - lowered cooldown `? → 150ms`
+- **Not yet confirmed**: whether this new threshold/window actually produces good-looking bop/shuffle animation throughout the whole song, or just improves it partially — was about to be visually tested.
+
+### Console logging had been silently removed
+- `detectBeat()` had no `console.log` at all, which is why "nothing shows in the console" — not a functional bug, just missing instrumentation.
+- **Fix**: re-added `console.log('energy:', ..., 'avg:', ...)` right after `avgEnergy` is calculated.
+- **Not yet confirmed**: whether the log now shows expected values, and whether the typewriter image visibly animates in sync — this was the very last open question in the session.
+
+---
+
+## 10. WHAT STILL NEEDS TO BE DONE — UPDATED
+
+### New from this session:
+- [ ] Confirm the `if` guard is closing around the correct block (beat-detection functions positioned correctly relative to it)
+- [ ] Reload page, confirm console now logs `energy`/`avg` values as expected
+- [ ] Confirm typewriter image visibly shuffles/bops in sync with the beat now that the averaging bug is fixed
+- [ ] If detection is still too sparse or too twitchy, `1.08` (multiplier) and `8` (window size) are the two easiest knobs left to tune
+- [ ] **Homepage session never happened — still needs to happen.** `.about-strip__notebook`/`.about-strip__right` still missing explicit closing tags, `.about-strip` min-height still unconfirmed final (both flagged before this session started, unchanged)
+
+### Carried over, unchanged, still not touched:
+- Postcard rotation mismatch (`.contact-card__bg` -1deg vs `.contact-card__form` 1deg)
+- Sent-confirmation envelope image stretched (lost `aspect-ratio` fix, currently fixed `800×450px`)
+- Typewriter positioning/spacing/animation values — first pass, not tuned
+- Duplicate `.contact-card__sent-text` CSS rule
+- All prior about/work/performance/mobile-nav open items
+
+---
+
+## 11. WHERE WE LEFT OFF
+
+- **Stated goal at session start**: work on the homepage.
+- **What actually happened**: got pulled into fixing three bugs in the contact page's typewriter beat-detection code (syntax error, averaging bug, missing logging).
+- **Not completed**: never confirmed the fixes actually produce correct beat-synced animation; never got to homepage work at all.
+- **Very next step**: reload the contact page, check the console output and visual animation match expectations — *then* actually pivot to the homepage as originally planned.
+- **Commits this session**: not yet confirmed — remind Veroushka to check `git status` and commit `js/contact.js` before doing anything else.
+
+```bash
+git add js/contact.js
+git commit -m "fix: correct beat-detection averaging, restore missing if-guard and console logging in typewriter feature"
+git push
+```

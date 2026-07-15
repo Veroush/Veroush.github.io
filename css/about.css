@@ -9,10 +9,10 @@
 .about-intro__bg {
   display: block;
   position: absolute;
-  top: 0px;
+  top: -50px;
   left: 0;
   width: 100vw;
-  height: 750px;      
+  height: 880px;      
   z-index: 0;
 }
 
@@ -40,7 +40,7 @@
 
 .about-intro__header-cluster {
   position: relative;
-  top: 150px;      
+  top: 70px;      
   left: 0px;
 }
 

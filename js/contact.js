@@ -77,23 +77,81 @@ document.addEventListener('DOMContentLoaded', () => {
   const florkImg = document.querySelector('.contact-typewriter__flork');
 
   if (typewriterImg && typewriterAudio) {
+  // --- Beat detection setup ---
+  let audioCtx, analyser, dataArray, source;
+  let beatDetectionActive = false;
+  let energyHistory = [];
+  let lastBeatTime = 0;
+  let shuffleStep = 0;
+  const shufflePositions = ['up', 'down', 'left', 'right', 'center'];
+
+  function setupAudioAnalyser() {
+    if (audioCtx) return; // only set up once
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    source = audioCtx.createMediaElementSource(typewriterAudio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+  }
+
+  function detectBeat() {
+    if (!beatDetectionActive) return;
+
+    analyser.getByteFrequencyData(dataArray);
+    const energy = dataArray.slice(0, 20).reduce((sum, val) => sum + val, 0);
+
+    // compare against average of PAST frames only, before adding the current one
+    const avgEnergy = energyHistory.length > 0
+      ? energyHistory.reduce((a, b) => a + b, 0) / energyHistory.length
+      : energy;
+
+    console.log('energy:', energy.toFixed(1), 'avg:', avgEnergy.toFixed(1));
+
+    const now = performance.now();
+
+    if (energy > avgEnergy * 1.08 && energy > 50 && now - lastBeatTime > 150) {
+      onBeat();
+      lastBeatTime = now;
+    }
+
+    energyHistory.push(energy);
+    if (energyHistory.length > 8) energyHistory.shift();
+
+    requestAnimationFrame(detectBeat);
+  }
+
+  function onBeat() {
+    // remove any previous position class, add the next one in sequence
+    shufflePositions.forEach(pos => typewriterImg.classList.remove(`is-shuffle-${pos}`));
+    typewriterImg.classList.add(`is-shuffle-${shufflePositions[shuffleStep]}`);
+    shuffleStep = (shuffleStep + 1) % shufflePositions.length;
+  }
+
     typewriterImg.addEventListener('click', () => {
-      if (typewriterAudio.paused) {
-        typewriterAudio.play();
-      } else {
-        typewriterAudio.pause();
-        typewriterAudio.currentTime = 0;
-      }
-    });
+        setupAudioAnalyser();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        if (typewriterAudio.paused) {
+          typewriterAudio.play();
+        } else {
+          typewriterAudio.pause();
+          typewriterAudio.currentTime = 0;
+          shuffleStep = 0;
+        }
+      });
 
     // Sync the animations to actual play/pause state, not just clicks
     typewriterAudio.addEventListener('play', () => {
-      typewriterImg.classList.add('is-shuffling');
       if (florkImg) florkImg.classList.add('is-bopping');
+      beatDetectionActive = true;
+      detectBeat();
     });
 
     typewriterAudio.addEventListener('pause', () => {
-      typewriterImg.classList.remove('is-shuffling');
+      beatDetectionActive = false;
+      typewriterImg.classList.remove('is-shuffle-up', 'is-shuffle-down', 'is-shuffle-left', 'is-shuffle-right', 'is-shuffle-center');
       if (florkImg) florkImg.classList.remove('is-bopping');
     });
 

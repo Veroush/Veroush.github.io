@@ -256,26 +256,18 @@ h2, h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -250px;
+  margin-top: -220px;
   background: #111;
 }
 
-.hero__video {
+.hero__bg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 30%;   /* was: center top — nudges the crop point down */
-  transform-origin: center;
+  object-position: center 30%;
   z-index: 0;
-}
-
-.hero__overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1;
 }
 
 .hero__content {
@@ -289,7 +281,7 @@ h2, h3 {
 .hero__name {
   font-size: clamp(2.5rem, 8vw, 6rem);
   font-family: 'ShinyPaint', sans-serif;   
-  color: white;
+  color: rgb(0, 0, 0);
   margin-bottom: 1rem;
 }
 
@@ -305,7 +297,7 @@ h2, h3 {
 
 .about-strip {
   position: relative;
-  background: linear-gradient(180deg, #3e6881 0%, #ffffff 25%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 60%, #ffffff 100%);
   padding: 5rem 3rem 5rem 2rem;
   overflow: hidden;
   min-height: 800px;  /* increase this until nothing gets cut off */
