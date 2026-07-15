@@ -382,3 +382,26 @@
 .contact-typewriter__img:hover {
   transform: scale(1.05);
 }
+
+@keyframes typewriter-bop {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.08) translateY(-6px); }
+}
+
+.contact-typewriter__flork.is-bopping {
+  animation: typewriter-bop 0.5s ease-in-out infinite;
+}
+
+@keyframes typewriter-shuffle {
+  0%, 100% { transform: translate(0, 0); }
+  12.5% { transform: translate(0, -8px); }   /* up */
+  25% { transform: translate(0, 0); }        /* back down */
+  37.5% { transform: translate(-8px, 0); }   /* left */
+  50% { transform: translate(0, 0); }        /* back to center */
+  62.5% { transform: translate(8px, 0); }    /* right */
+  75% { transform: translate(0, 0); }
+}
+
+.contact-typewriter__img.is-shuffling {
+  animation: typewriter-shuffle 1.2s ease-in-out infinite;
+}

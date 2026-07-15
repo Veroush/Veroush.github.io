@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Typewriter — click to play/stop (resets on explicit stop), pauses without resetting on tab/focus loss
   const typewriterImg = document.getElementById('typewriter-img');
   const typewriterAudio = document.getElementById('typewriter-audio');
+  const florkImg = document.querySelector('.contact-typewriter__flork');
 
   if (typewriterImg && typewriterAudio) {
     typewriterImg.addEventListener('click', () => {
@@ -83,6 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
         typewriterAudio.pause();
         typewriterAudio.currentTime = 0;
       }
+    });
+
+    // Sync the animations to actual play/pause state, not just clicks
+    typewriterAudio.addEventListener('play', () => {
+      typewriterImg.classList.add('is-shuffling');
+      if (florkImg) florkImg.classList.add('is-bopping');
+    });
+
+    typewriterAudio.addEventListener('pause', () => {
+      typewriterImg.classList.remove('is-shuffling');
+      if (florkImg) florkImg.classList.remove('is-bopping');
     });
 
     // Just pause (keep position) when the tab/window loses focus —
