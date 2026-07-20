@@ -395,122 +395,108 @@ h2, h3 {
 
 .experience-projects {
   position: relative;
-  display: flex;          /* can stay, won't matter much once children are absolute */
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-  flex-wrap: wrap;
-  padding: rem 2rem 4rem;
   background: #ffffff;
-  min-height: 700px;       /* tune this — smallest value that doesn't clip the notes */
+  padding: 4rem 2rem;
+  min-height: 800px;   /* tune once both images are placed */
   overflow: hidden;
 }
 
-.experience-projects__note {
-  position: relative;
-  width: 320px;
-  z-index: 1;
+.experience-projects__title {
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-.experience-projects__note-bg {
+/* ---------- WORK EXPERIENCE (ring binders, left) ---------- */
+.experience-projects__work {
+  position: absolute;
+  top: 80px;
+  left: 80px;     /* pushes it toward the left edge of the viewport */
+  width: 530px;
+}
+
+.experience-projects__binders {
+  position: relative;
+}
+
+.experience-projects__binders-img {
   width: 100%;
   display: block;
 }
 
-.experience-projects__note-text {
+.experience-projects__binder-label {
   position: absolute;
-  inset: 0;
-  padding: 4rem 2rem;
+  width: 200px;
   font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  text-align: center;
+  color: #111;
+  transform: rotate(-90deg);
+  transform-origin: left center;
+  font-weight: 700;
 }
 
-.experience-projects__note-text h3 {
-  font-family: 'HalfTermSchoolsOut';
-  margin-bottom: 0.5rem;
-}
+/* yellow binder — most recent role */
+.experience-projects__binder-label--1 { top: 330px; left: 100px; }
+/* orange/red binder */
+.experience-projects__binder-label--2 { top: 330px; left: 200px; }
+/* blue binder */
+.experience-projects__binder-label--3 { top: 330px; left: 295px; }
 
-.experience-projects__note-text p {
-  margin-bottom: 0.75rem;
-  line-height: 1.3;
-}
-
-.experience-projects__note-text ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.experience-projects__note-text li {
-  margin-bottom: 0.5rem;
-}
-
-.experience-projects__joke {
-  text-decoration: line-through;
-  color: black;
-}
-
-.experience-projects__note--work {
-  position: absolute;      /* was relative */
-  width: 600px;
-  top: 100px;                
-  left: 140px;
-}
-
-.experience-projects__note--projects {
-  position: absolute;      /* was relative */
+/* ---------- PROJECTS (legos, right, slightly lower) ---------- */
+.experience-projects__projects {
+  position: absolute;
+  top: 220px;     /* lower than the binders block, per your request */
+  left: 800px;    /* pushes it toward the right */
   width: 500px;
-  top: 150px;                
-  left: 800px;
 }
 
-.experience-projects__note--work .experience-projects__note-text {
+.experience-projects__legos {
+  position: relative;
+}
+
+.experience-projects__legos-img {
+  width: 100%;
+  display: block;
+}
+
+.experience-projects__lego-label {
   position: absolute;
-  top: 120px;      /* smaller number = higher up */
+  width: 150px;
+  font-family: 'HalfTermSchoolsOut', sans-serif;
+  font-size: 1.2rem;      /* matches binder labels */
+  font-weight: 700;        /* matches binder labels */
+  line-height: 1.2;
+  text-align: center;
+  color: #111;
+}
+
+/* Blue block — top of the stack */
+.experience-projects__lego-label--1 {
+  top: 100px;
+  left: 90px;
+  transform: rotate(10deg) skewY(17deg);
+}
+
+/* Green block — top right */
+.experience-projects__lego-label--2 {
+  top: 155px;
+  left: 250px;
+  transform: rotate(10deg) skewY(17deg);
+}
+/* Red block — front/center, most prominent */
+.experience-projects__lego-label--3 {
+  top: 260px;
   left: 200px;
-  color: black;
 }
-
-.experience-projects__note--projects .experience-projects__note-text {
-  position: absolute;
-  top: 100px;      /* bigger number = lower down, relative to its own note */
-  left: 125px;
-  color: black;
+/* Yellow block — left side */
+.experience-projects__lego-label--4 {
+  top: 190px;
+  left: 85px;
+  transform: rotate(-10deg) skewY(-12deg);
 }
-
-.experience-projects__note--work .experience-projects__note-text p {
-  margin-bottom: 2.7rem;   /* increase this number for more space */
-  font-size: 1.4rem; 
-}
-
-.experience-projects__note--projects .experience-projects__note-text li {
-  margin-bottom: 1.5rem;
-  font-size: 1.4rem; 
-}
-
-.experience-projects__note--work .experience-projects__note-text h3 {
-  position: relative;
-  top: -46px;          /* negative = moves it up, independent of the p tags below */
-  left: 0;
-  font-size: 2rem;  /* bigger than the p/li text */
-  text-decoration: underline;
-}
-
-.experience-projects__note--projects .experience-projects__note-text h3 {
-  position: relative;
-  top: -20px;          /* negative = up, positive = down — independent of work header */
-  left: 0;
-  font-size: 2rem;   /* independent size from work header and from the li text below */
-  text-decoration: underline;
-}
-
-.experience-projects__arrow {
-  position: absolute;
-  top: -40px;
-  left: 100px;          /* LEFT/RIGHT: bigger number = further right, negative = further left */
-  width: 500px;     /* BIGGER/SMALLER: increase this number to make it bigger */
-  z-index: 0;
-}
-
 /* ============================================================
    SKILLS SECTION
    ============================================================ */
