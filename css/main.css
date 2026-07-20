@@ -4,21 +4,21 @@
 
 @font-face {
   font-family: 'HalfTermSchoolsOut';
-  src: url('/fonts/HalfTermSchoolsOut-V4q5l.ttf') format('truetype');
+  src: url('/fonts/half-term-schools-out-v4q5l.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'ShinyPaint';
-  src: url('/fonts/ShinyPaint-ZpWEZ.otf') format('opentype');
+  src: url('/fonts/shiny-paint-zpwez.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RightRound';
-  src: url('/fonts/RightRound-Wq7G.ttf') format('truetype');
+  src: url('/fonts/right-round-wq7g.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
