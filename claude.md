@@ -1695,3 +1695,349 @@ git commit -m "style: add torn-paper footer SVG"
 git push
 ```
 ```
+# Session Handoff Document — Veroushka Ramjiawan Portfolio (Git Cleanup + Work-Experience/Projects Section Session)
+
+---
+
+## ⚠️ GIT RULES — READ THIS FIRST
+
+- After EVERY task, no matter how small, remind Veroushka to stage, commit, and push
+- Always suggest a commit message in this format:
+  - `feat:` new feature or section added
+  - `fix:` bug or broken thing corrected
+  - `style:` CSS or visual changes only
+  - `refactor:` restructuring code without changing behavior
+  - `chore:` moving files, renaming, cleanup
+- For any significant feature, suggest creating a branch first:
+  ```bash
+  git checkout -b feature/branch-name
+  ```
+  and merging back to main when done
+- **Veroushka tends to forget git entirely — remind proactively, do not wait to be asked**
+- **⚠️ Confirm `git status` at the start of the next session before making any further edits.**
+
+### NEW THIS SESSION — Windows case-sensitivity renames
+
+Windows' filesystem is case-*insensitive*; Git/GitHub is case-*sensitive*. Simply renaming a file's
+case in VS Code/File Explorer (e.g. `CLAUDE.md` → `claude.md`) is often **silently ignored by Git**
+— it looks renamed locally, commits "successfully," but GitHub never actually sees a change,
+because Windows treats it as the same file.
+
+**Always verify a case-only rename actually registered:**
+```bash
+git show --name-status HEAD
+```
+If the renamed file doesn't appear in that commit's file list (as `A` add or `R100` rename), the
+rename didn't take.
+
+**Fix — force it with a two-step rename through an intermediate name:**
+```bash
+git mv OldName.ext temp_rename.ext
+git commit -m "chore: temp rename step 1"
+git mv temp_rename.ext newname.ext
+git commit -m "chore: rename OldName.ext to newname.ext"
+git push
+```
+This is now the standard procedure for any future case-only renames on this project (Windows-only
+issue — would not be needed on Mac/Linux, which are case-sensitive by default).
+
+**Applied this session:**
+- `CLAUDE.md` → `claude.md` — confirmed via `git show --name-status HEAD`, showed `R100 temp_rename.md claude.md`. **Fixed and confirmed live on GitHub.**
+- `Sara.jpeg` → `sara.jpeg` (in `img/homepage/`) — same two-step method walked through, **execution not yet confirmed pushed by Veroushka as of this handoff — verify `git ls-files | findstr -i sara` and `git show --name-status HEAD` at the start of next session.**
+- After any rename like this, always run `git grep -i "filename"` to check whether any HTML/CSS still references the old casing, and update those references to match.
+
+---
+
+## 1. PROJECT OVERVIEW (reconfirmed / unchanged)
+
+- Personal portfolio website for Veroushka Ramjiawan
+- IT student at UNASAT (Stichting University of Applied Sciences and Technology Suriname), Paramaribo
+- School assignment requiring: home, about, work, and contact pages
+- Visual direction: origami + graffiti school aesthetic, ripped/torn paper texture imagery for nav and footer, continuous color gradient flowing down the homepage. About page uses a "taped-up scrapbook/sticky-note" visual motif (tape graphics, overlapping photos, handwriting font).
+- Tech stack: plain vanilla HTML, CSS, JavaScript only — no frameworks, no libraries, no build tools (teacher requirement)
+- **Vite has been fully removed from this project.** `vite.config.js`, `package.json`, and `package-lock.json` were all deleted and committed out (`chore: remove remaining Vite tooling files`). The project is now pure static files with zero build step. **Do not reintroduce Vite or suggest `npm run dev`-style commands — this project intentionally has no package manager or build tool.**
+- GitHub username is now lowercase: `https://github.com/veroush/` (see GitHub rename section from prior handoff — still fully in effect)
+- Repo is `veroush.github.io` — a root **user page**, not a project page. Live site: `https://veroush.github.io/` (no subpath)
+- Site is published via GitHub Pages — standard `git add . / git commit / git push` workflow triggers an automatic Actions-based redeploy (`pages-build-and-deployment` workflow). No separate deploy step needed.
+- Veroushka uses Microsoft Edge as her primary browser — relevant for any browser-specific rendering bugs (previously documented: Chromium/Edge caret-under-rotated-ancestor rendering bug).
+- Site loads slowly due to the large number of images in `img/`. Full image optimization plan documented (Squoosh workflow) but explicitly deferred to end of project.
+
+### NEW — How Veroushka previews the site locally (no Vite server)
+Since Vite is gone and the CSS uses some absolute root paths (`/fonts/...`), opening `index.html`
+directly via `file://` in a browser will NOT work correctly. Confirmed working local-preview method:
+- **VS Code "Live Server" extension** (by Ritwick Dey) — right-click `index.html` → "Open with Live Server". Opens at `http://127.0.0.1:5500/`, auto-reloads on save. **This is the standard local dev method going forward — reference this instead of any Vite/npm command if Veroushka asks how to preview changes.**
+- Alternatives mentioned but not the default: `python -m http.server`, `npx serve .`
+
+---
+
+## 2. FOLDER & FILE STRUCTURE — CHANGES THIS SESSION
+
+```
+project/
+├── claude.md              # RENAMED from CLAUDE.md (lowercase now) — two-step git mv, confirmed live
+├── README.md               # NEW — created this session, general project readme
+├── css/
+│   └── main.css            # .experience-projects section fully rebuilt — see Section 8
+├── img/
+│   └── homepage/
+│       ├── ring-binders.png    # NEW — replaces old work-experience SVG/note graphic
+│       ├── legos.png           # NEW — replaces old projects SVG/note graphic
+│       ├── sara.jpeg           # rename in progress — see GIT RULES section above, NOT YET CONFIRMED PUSHED
+│       ├── work-experience.svg # NO LONGER USED — was deleted from disk and git this session
+│                                # (confirmed via `git show --name-status HEAD` on the "added new
+│                                #  images" commit — showed as `D`)
+│       └── projects-note.png   # NO LONGER USED — same commit, also shows as `D` (deleted)
+└── index.html               # .experience-projects section markup fully rebuilt — see Section 8
+```
+
+**Note:** `vite.config.js` and `package.json`/`package-lock.json` — confirmed fully removed from
+both disk and git tracking. Do not re-add.
+
+---
+
+## 3–7. ROUTES / DATABASE / CONTROLLERS / MIDDLEWARE / AUTH
+
+Not applicable — static HTML/CSS/JS only, no backend. Skipping.
+
+---
+
+## 8. FEATURES ADDED/CHANGED THIS SESSION
+
+### `.experience-projects` section — fully rebuilt from SVG/note-based design to image-based design
+
+**Old design (now fully removed):** `work-experience.svg` note graphic + `projects-note.png` note
+graphic, each with an `__note-bg` image and an `__note-text` overlay, styled to look like sticky
+notes. Both source images deleted.
+
+**New design:** two side-by-side image blocks — `ring-binders.png` (work experience, left side of
+viewport) and `legos.png` (projects, right side of viewport, positioned slightly lower than the
+binders block) — each with a title above it and individual text labels positioned directly on top
+of the image.
+
+#### Work Experience block (`ring-binders.png`)
+- New wrapper `.experience-projects__work`, absolutely positioned toward the **left edge** of the viewport
+- Title: `<h3 class="experience-projects__title">My Work Experience</h3>`, sits above the image
+- Each of the 3 real binders (yellow / red-orange / blue) gets one label:
+  - `--1` (yellow, most recent) = "Software Tester — ERP Portal"
+  - `--2` (orange/red) = "Telesales Specialist — Lean Up IT"
+  - `--3` (blue) = "Klantenservice Medewerker — Concentrix"
+  - The 4th, skewed dark-red binder in the image is intentionally left blank/unlabeled
+- Text is **rotated vertically** to run along the spine: `transform: rotate(-90deg); transform-origin: left center;`
+- **Final live styling for `.experience-projects__binder-label`:**
+  ```css
+  .experience-projects__binder-label {
+    position: absolute;
+    top: 350px;              /* shared — moves all 3 together */
+    width: 200px;
+    font-family: 'HalfTermSchoolsOut', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    color: #111;
+    transform: rotate(-90deg);
+    transform-origin: left center;
+  }
+  .experience-projects__binder-label--1 { left: 55px; }
+  .experience-projects__binder-label--2 { left: 150px; }
+  .experience-projects__binder-label--3 { left: 245px; }
+  ```
+- **Legibility fix, resolved a different way than planned**: the original binder image had
+  decorative horizontal lines printed across the label area, which visually cut through the
+  rotated text and made it hard to read. Several CSS options were discussed (solid white background
+  chip, gradient-fade background chip, text-shadow outline) — **Veroushka ultimately fixed this by
+  editing the source image itself** (`ring-binders.png`) to remove/lighten the lines, rather than
+  compensating in CSS. **No background/box styling is currently applied to the label text — confirm
+  this is still true if this section is revisited, since it was a deliberate simplification.**
+- Image size controlled via the wrapper: `.experience-projects__work { width: ...px }` (was bumped
+  up from an initial `380px` — **exact final value not confirmed, check live CSS**)
+
+#### Projects block (`legos.png`)
+- New wrapper `.experience-projects__projects`, absolutely positioned toward the **right** side of
+  the viewport, and **vertically lower** than the work-experience block (per Veroushka's explicit
+  request — "to the right and slightly downwards")
+- Title: `<h3 class="experience-projects__title">Projects</h3>`, sits above the image
+- Each of the 4 project names is matched to a lego block by color:
+  - `--1` = TaskFlow → **blue block**, top of the stack
+  - `--2` = Chronicles of Booksteria → **green block**, top right
+  - `--3` = Pixel Jumper: Arcade Odyssey → **red block**, front/center
+  - `--4` = Studie4SU (Team) → **yellow block**, left side
+- Font styling matched to the binder labels for visual consistency (same family/size/weight):
+  ```css
+  .experience-projects__lego-label {
+    position: absolute;
+    width: 150px;
+    font-family: 'HalfTermSchoolsOut', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    color: #111;
+  }
+  ```
+- **Orientation — important distinction from the binder labels**: Veroushka explicitly did NOT want
+  a 3D/blocky extruded-text effect (a CSS `text-shadow` stacking technique was demoed and rejected —
+  she clarified she wants her **normal existing font**, not blocky 3D letters). What she wants
+  instead is each label to look like a flat sticker sitting at an angle on its lego block's angled
+  top face — achieved via `transform: rotate() skewY()`, tuned per block to roughly match that
+  block's own visual angle in the image. This is still being fine-tuned interactively per label
+  (see "Not yet finalized" below) — was mid-tuning the TaskFlow/blue-block label specifically when
+  the session ended (rotate/skew/font-size/position values were being adjusted live against
+  screenshots).
+- `(Team)` spacing fix applied to the Studie4SU label — default single space between "Studie4SU" and
+  "(Team)" was collapsing in HTML; resolved (final method: either `&nbsp;` repeated, a spacer
+  `<span>` with `margin-left`, or a `<br>` line break — **confirm which of the three options
+  Veroushka actually kept, not explicitly reconfirmed at session end**)
+- Image size controlled via the wrapper: `.experience-projects__projects { width: ...px }` (was
+  bumped up this session — **exact final value not confirmed, check live CSS**)
+
+---
+
+## 9. BUGS & ERRORS WE FIXED (this session)
+
+### GitHub repo page appeared not to update after pushing
+- **Reported symptom**: Veroushka said pushes succeeded locally, but `github.com/veroush/veroush.github.io` (the repo/source-code page) didn't seem to reflect the latest commit.
+- **Root cause**: browser caching on the GitHub repo homepage specifically. Confirmed via the `/commits/main` URL, which DID show the correct latest commit — meaning git/GitHub were both working correctly the entire time.
+- **Fix**: hard refresh / incognito resolved it. No code or git issue existed.
+- **Lesson**: when "GitHub isn't updating" is reported, check `/commits/main` (or the Actions tab) before assuming a git problem — these pages are less aggressively cached than the repo homepage and give a faster, more reliable answer.
+- **Also confirmed working correctly during this investigation**: GitHub Pages Actions deployments — 67 workflow runs checked, all green/succeeded, each tied to a real commit, ~45–55s build time each. Pages deployment itself has never been the problem in this project.
+
+### `CLAUDE.md` → `claude.md` rename not registering on GitHub
+- See GIT RULES section above for full detail — Windows case-insensitivity + Git case-sensitivity mismatch. Fixed via two-step `git mv` through an intermediate filename. **This is now a documented, repeatable fix for this project — reuse this method for any future case-only renames (e.g. the in-progress `Sara.jpeg` → `sara.jpeg`).**
+
+---
+
+## 10. WHAT STILL NEEDS TO BE DONE — UPDATED
+
+### Immediate next-session priority (git hygiene)
+- [ ] Run `git status` first thing — confirm this session's `.experience-projects` rebuild (index.html + main.css) was actually committed and pushed. **Not explicitly confirmed at end of session — treat as unconfirmed.**
+- [ ] Confirm the `Sara.jpeg` → `sara.jpeg` two-step rename was completed and pushed (`git ls-files | findstr -i sara`, then `git show --name-status HEAD`)
+- [ ] Run `git grep -i "sara.jpeg"` after the rename to confirm no HTML/CSS still references the old capitalized filename — if the file turns out to be genuinely unused (it was inside the deleted homepage notebook block from an earlier session), consider `git rm` instead of keeping a renamed-but-unused file
+
+### `.experience-projects` section — ACTIVE AREA, in progress
+- [ ] **Lego label rotation/skew — mid-tuning, not finished.** Only the TaskFlow (blue block, `--1`) label was being actively adjusted when the session ended. `--2`/`--3`/`--4` still have earlier placeholder `rotate()`/`skewY()` values that were never individually matched to their own block's angle — this is the very next thing to pick back up.
+- [ ] Confirm final `width` values for `.experience-projects__work` and `.experience-projects__projects` wrappers (both were bumped up from their original placeholders this session, exact final numbers not confirmed)
+- [ ] Confirm which method was kept for the Studie4SU/(Team) spacing fix (`&nbsp;`, spacer span, or `<br>`)
+- [ ] Confirm `.experience-projects`'s `min-height` still looks correct now that the section's contents have completely changed shape (binders block position + legos block position, offset lower) — old value was tuned for the previous SVG/note layout and has not been re-validated against the new one
+- [ ] General visual pass: confirm the binders block (left) and legos block (right, lower) don't overlap or look unbalanced at different viewport widths — no responsive/mobile check has been done on this new section at all yet
+
+### Carried over, unchanged, still not touched this session:
+- **Homepage**: `.about-strip__right` re-centering after notebook removal (negative `left` values like `-720px`/`-200px`/`-350px` still present in current CSS) — **this is still the single most visually urgent open item on the whole site**, carried over across multiple sessions now
+- **Homepage**: missing closing `</div>` on `.about-strip__right` — long-standing low-priority bug, still not fixed
+- **Homepage**: `about-strip-bg.svg` — unclear whether the one-layer or two-layer (gradient+SVG) background version was kept; comma-count mismatch bug was explained but resolution not confirmed
+- **Homepage**: dead CSS from the notebook removal (`.about-strip__notebook`, `.about-strip__photo-wrap`, `.about-strip__tape`, `.about-strip__bio-text`, etc.) still not deleted from `main.css`
+- **GitHub link casing sweep**: `work.html` and `contact.html` still reference `https://github.com/Veroush/` (capital V) in places — confirmed still present in the current `index.html` footer link shown this session (`href="https://github.com/Veroush"`). **Full find-and-replace across all 4 HTML files still not done.**
+- **About page**: hobbies cluster centering decision, "Who I Am"/Education sections not yet added to HTML, `.about-intro__title` top-value re-check after header-cluster removal, `background6.png` confirmation as final
+- **Work page**: project card position tuning, subnav/nav-row cluster final values, `.work-console__screen` placeholder values, smiley badge/divider exact color picks
+- **Contact page**: postcard rotation mismatch (still drifted, unfixed), sent-confirmation envelope image still stretched (needs `aspect-ratio` restored), duplicate `.contact-card__sent-text` CSS rule, typewriter beat-detection fixes not yet visually reconfirmed as working end-to-end
+- **Performance**: full image compression/resize pass via Squoosh — still deferred to end of project
+- **Global**: mobile hamburger nav (`main.js`) still not re-tested against current nav structure; no mobile/responsive pass has been done on any page
+
+---
+
+## 11. WHERE WE LEFT OFF
+
+- **This session's topics**: Fixed a case-sensitivity git confusion (`CLAUDE.md`/`claude.md` not
+  syncing to GitHub — traced to Windows/Git case-insensitivity mismatch, fixed via two-step
+  rename), diagnosed a false alarm about GitHub "not updating" (was browser caching on the repo
+  homepage, not an actual sync problem — Pages deployments confirmed all succeeding), started the
+  same two-step rename process for `Sara.jpeg` → `sara.jpeg`, then fully rebuilt the
+  `.experience-projects` homepage section from an old SVG/sticky-note design to a new
+  image-based design using `ring-binders.png` (work experience) and `legos.png` (projects), including
+  rotated vertical text labels on the binders and angled sticker-style labels on the lego blocks.
+- **Completed**: `claude.md` rename confirmed live on GitHub; work-experience/projects section
+  markup + CSS fully rebuilt and styled (font, weight, rotation on binders); binder label legibility
+  issue resolved by Veroushka directly editing the source image rather than via CSS.
+  README.md created.
+- **Not completed**: `Sara.jpeg` rename not yet confirmed pushed; lego label rotation/skew values
+  only tuned for 1 of 4 labels (TaskFlow); wrapper widths for both new image blocks not locked to
+  final values; Studie4SU/(Team) spacing fix method not reconfirmed; no commit was explicitly
+  confirmed pushed for the `.experience-projects` rebuild before the session ended.
+- **Very next step**: confirm `git status` is clean and everything from this session actually made
+  it to GitHub, then continue tuning the remaining 3 lego labels' rotate/skew values to visually
+  match their blocks, then move on to the long-overdue `.about-strip__right` re-centering, which
+  remains the top-priority visual fix across the whole project.
+- **Commits this session**: **NOT explicitly confirmed** — suggested commit message provided below,
+  but Veroushka's confirmation that `git push` was actually run was not captured in this session.
+  **Treat this as the git-status check to run first, next session.**
+
+Suggested commit for this session's work (adjust filenames if `sara.jpeg` rename also needs to go in):
+```bash
+git add index.html css/main.css img/homepage/ring-binders.png img/homepage/legos.png README.md
+git commit -m "feat: rebuild work-experience/projects section with ring-binders and legos imagery
+
+- remove old work-experience.svg and projects-note.png sticky-note design
+- add ring-binders.png with rotated vertical labels for each role
+- add legos.png with angled sticker-style labels for each project
+- add README.md"
+git push
+```
+
+If the `sara.jpeg` rename is still pending, keep it as its own separate commit (per the two-step
+process documented in the GIT RULES section above) rather than bundling it into the feature commit.
+
+---
+
+## 12. PERSONAL DETAILS & CONTENT
+
+Unchanged this session — see main handoff document (Section 12) for full details: name, date of
+birth, school, contact info, location, primary browser, all live About page text content,
+not-yet-placed "Who I Am"/Education drafts, "People I admire" reference material.
+
+**Work Experience (confirmed live copy, now displayed via `ring-binders.png` on the homepage
+instead of the old sticky note):**
+- Software Tester — ERP Portal *(most recent — yellow binder)*
+- Telesales Specialist — Lean Up IT *(red/orange binder)*
+- Klantenservice Medewerker — Concentrix *(blue binder)*
+
+**Projects (confirmed live copy, now displayed via `legos.png` on the homepage instead of the old
+sticky note):**
+- TaskFlow *(blue lego block)* — `https://github.com/veroush/taskflow` — React, Node.js, PostgreSQL, Prisma
+- Chronicles of Booksteria *(green lego block)* — `https://github.com/veroush/chronicles_of_booksteria` — HTML/CSS/vanilla JS
+- Pixel Jumper: Arcade Odyssey *(red lego block)* — `https://github.com/veroush/pixel-jumper-arcade-odyssey` — Phaser 3
+- Studie4SU (Team) *(yellow lego block)* — `https://github.com/veroush/studie4su` — Node.js/Express/Prisma/MySQL, JWT auth, admin dashboard
+
+**Reminder**: GitHub base URL is `https://github.com/veroush/` (lowercase) everywhere going
+forward — several places across the site (footer link confirmed this session, work page, contact
+page) still have NOT been swept to match and still say capital-V `Veroush`.
+
+---
+
+## 13. SIDE TOPICS
+
+- **Design philosophy reconfirmed this session**: when a CSS-only fix for an image legibility issue
+  (lines behind rotated text) got complicated across several iterations (gradient fade, solid
+  background chip, text-shadow outline), Veroushka's preference was to just **edit the source image
+  directly** instead of continuing to fight it in CSS. Worth remembering as a general pattern for
+  this project — not every visual problem needs to be solved in CSS; sometimes editing the asset
+  itself is faster and cleaner, and that's a valid choice here, not a shortcut to avoid.
+- **3D text was explicitly explored and explicitly rejected.** A full blocky/extruded 3D text-shadow
+  technique (multiple stacked shadow layers + `-webkit-text-stroke`) was demoed in detail per
+  Veroushka's initial ask, but she clarified she actually wanted the *positioning/angle* of a 3D
+  sticker-on-a-surface look (rotate + skew), while keeping her existing handwriting font completely
+  normal/flat — not blocky 3D lettering. **Do not suggest the blocky 3D text-shadow technique again
+  for this project** unless she explicitly asks for it a second time.
+- Local dev workflow clarified: Live Server (VS Code extension) is the standard way Veroushka
+  previews the site now that Vite is gone — worth defaulting to this suggestion if local preview
+  ever comes up again, rather than re-explaining multiple options each time.
+
+---
+
+## ⚠️ GIT RULES — REMINDER AT THE BOTTOM
+
+- After EVERY task, remind Veroushka to stage, commit, and push
+- Suggest commit messages using `feat:`, `fix:`, `style:`, `refactor:`, `chore:` prefixes
+- Suggest branches for big features
+- **Do not wait to be asked — remind proactively every time**
+- **⚠️ This session's work is NOT explicitly confirmed committed or pushed. Run `git status` FIRST
+  at the start of the next session before making any further edits.**
+- **⚠️ Reminder: Windows case-only renames need the two-step `git mv` trick (see top of this
+  document) — do not assume a simple rename in VS Code was picked up by Git without verifying via
+  `git show --name-status HEAD`.**
+
+```bash
+git status
+git add .
+git commit -m "your message here"
+git push
+```
