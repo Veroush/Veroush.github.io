@@ -1392,9 +1392,9 @@ project/
 │   │   ├── html5-icon.png     # RENAMED from HTML5-icon.png — skills section, index.html
 │   │   ├── homepage2.png      # REMOVED FROM USE (notebook image) — see Section 8
 │   │   ├── tape1.png / tape2.png   # REMOVED FROM USE (were inside removed photo-wrap)
-│   │   ├── Sara.jpeg          # STATUS UNCONFIRMED — was inside removed photo-wrap block.
+│   │   ├── sara.jpeg          # STATUS UNCONFIRMED — was inside removed photo-wrap block.
 │   │   │                        Check if file still exists in repo; if truly unused, safe to
-│   │   │                        `git rm`, otherwise rename to sara.jpeg for kebab-case compliance.
+│   │   │                       `git rm`, otherwise rename to sara.jpeg for kebab-case compliance.
 │   │   └── about-strip-bg.svg # NEW — scattered confetti/blob decorative SVG, intended as
 │   │                            .about-strip background. Sizing/position still being tuned
 │   │                            (see Section 8) — confirm final background-size/position values.
